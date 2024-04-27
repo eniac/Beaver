@@ -1,0 +1,11 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 120
+AlignEscapedNewlines: Left
+AlignAfterOpenBracket: AlwaysBreak
+PointerAlignment: Left
+AlwaysBreakAfterReturnType: All
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBraces: Mozilla
+SortIncludes: true

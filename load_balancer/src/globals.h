@@ -1,8 +1,8 @@
 #ifndef GLOBALS_H_
 #define GLOBALS_H_
 
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 #include "endpoint_hash.h"
 #include "nic_info_get.h"
@@ -11,8 +11,8 @@ extern const uint32_t kMbufsNum;
 extern const uint32_t kMbufsCacheSize;
 extern const uint32_t kRecvBurstSize;
 extern const uint32_t kUdpHdrSize;
-extern const uint8_t  kRssKey[];
-extern const uint8_t  kBroadcastMac[];
+extern const uint8_t kRssKey[];
+extern const uint8_t kBroadcastMac[];
 
 // Global constants that need initialization
 // based on nodes'configuration

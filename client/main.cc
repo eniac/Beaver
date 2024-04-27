@@ -1,53 +1,46 @@
-#include <cstring>
-#include <iostream>
 #include "src/user/bpf_prog_manage.h"
 #include "src/user/client_self_define.h"
+#include <cstring>
+#include <iostream>
 
 using namespace std;
 
+int
+main(int argc, char* argv[])
+{
+    if (argc < 2) {
+        cout << "Provide a request type as argument.\n";
+        return -1;
+    }
 
-int main(int argc, char *argv[]) {
-  if (argc < 2) {
-    cout << "Provide a request type as argument.\n";
-    return -1;
-  } 
-
-  if (strcmp(argv[1], "intra") == 0) {
-    string service_ip = "192.168.100.1";
-    f_latency_test_client(service_ip, 10000);
-  }
-  else if (strcmp(argv[1], "inter") == 0) {
-    f_latency_test_tcp_server(20000);
-  }
-  else if (strcmp(argv[1], "internet") == 0) {
-    f_latency_test_tcp_server(20000);
-  }
-  else if (strcmp(argv[1], "bot") == 0) {
-    if (argc < 3) {
-      cout << "Provide a bot rate as argument.\n";
-      return -1;
+    if (strcmp(argv[1], "intra") == 0) {
+        string service_ip = "192.168.100.1";
+        f_latency_test_client(service_ip, 10000);
+    } else if (strcmp(argv[1], "inter") == 0) {
+        f_latency_test_tcp_server(20000);
+    } else if (strcmp(argv[1], "internet") == 0) {
+        f_latency_test_tcp_server(20000);
+    } else if (strcmp(argv[1], "bot") == 0) {
+        if (argc < 3) {
+            cout << "Provide a bot rate as argument.\n";
+            return -1;
+        }
+        float bot_ratio = atof(argv[3]);
+        if (strcmp(argv[2], "beaver") == 0) {
+            f_bot_beaver_test(bot_ratio);
+        } else if (strcmp(argv[2], "poll") == 0) {
+            f_bot_poll_test(bot_ratio);
+        } else if (strcmp(argv[2], "laiyang") == 0) {
+            f_bot_laiyang_test(bot_ratio);
+        } else {
+            cout << "Invalid argument.\n";
+            return -1;
+        }
+    } else {
+        cout << "Invalid argument.\n";
+        return -1;
     }
-    float bot_ratio = atof(argv[3]);
-    if (strcmp(argv[2], "beaver") == 0) {
-      f_bot_beaver_test(bot_ratio);
-    }
-    else if (strcmp(argv[2], "poll") == 0) {
-      f_bot_poll_test(bot_ratio);
-    }
-    else if (strcmp(argv[2], "laiyang") == 0) {
-      f_bot_laiyang_test(bot_ratio);
-    }
-    else {
-      cout << "Invalid argument.\n";
-      return -1;
-    }
-  }
-  else {
-    cout << "Invalid argument.\n";
-    return -1;
-  }
 }
-
 
 // int main(int argc, char *argv[]) {
 //   if (argc < 2) {

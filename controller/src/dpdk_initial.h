@@ -6,15 +6,14 @@
 
 #include "globals.h"
 
-struct QueueConfig {
-  struct rte_mempool* mempool_ptr;
-  uint16_t queue_id;
+struct QueueConfig
+{
+    struct rte_mempool* mempool_ptr;
+    uint16_t queue_id;
 
-  QueueConfig(struct rte_mempool* mempool_ptr, uint16_t queue_id)
-    : mempool_ptr(mempool_ptr), queue_id(queue_id) {}
+    QueueConfig(struct rte_mempool* mempool_ptr, uint16_t queue_id) : mempool_ptr(mempool_ptr), queue_id(queue_id) {}
 };
 
-
-void f_dpdk_nic_queue_initial(struct rte_mempool* mempool_ptr, 
-                              int dpdk_nic_id);
+void
+f_dpdk_nic_queue_initial(struct rte_mempool* mempool_ptr, int dpdk_nic_id);
 #endif // DPDK_INITIAL_H_
