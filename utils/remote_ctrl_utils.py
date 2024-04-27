@@ -1,6 +1,7 @@
-import paramiko  # Need to be installed
 import os
 import time
+
+import paramiko  # Need to be installed
 
 
 def f_ssh_connection_create(ssh_ip, user_name, key_path):

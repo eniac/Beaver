@@ -1,5 +1,13 @@
-from utils.config_task_gene import *
 import json
+
+from utils.config_task_gene import (
+    f_bot_nodes_config_gene,
+    f_bot_services_gene,
+    f_latency_intra_services_gene,
+    f_load_services_config_gene,
+    f_nodes_config_gene,
+    f_rate_services_config_gene,
+)
 
 
 def f_rate_config_gene(lb_num, config_file_path, active_nodes):

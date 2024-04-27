@@ -1,7 +1,7 @@
-import socket
-import time
-import sys
 import random
+import socket
+import sys
+import time
 
 
 def f_remote_reqs(remote_ip):

@@ -1,8 +1,28 @@
 import argparse
-import os
 
-from utils.task_gene import *
-from utils.work_gene import *
+from utils.job_gene import f_load_type_verify
+from utils.task_gene import (
+    f_replace_folders,
+    f_set_env,
+)
+from utils.work_gene import (
+    f_accuracy_run,
+    f_bot_beaver_run,
+    f_bot_config,
+    f_bot_laiyang_run,
+    f_bot_poll_run,
+    f_bound_run,
+    f_latency_inter_run,
+    f_latency_internet_run,
+    f_latency_intra_config,
+    f_latency_intra_run,
+    f_load_clear,
+    f_load_config,
+    f_load_run,
+    f_rate_clear,
+    f_rate_config,
+    f_rate_run,
+)
 
 
 def f_args_parse():
