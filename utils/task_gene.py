@@ -98,8 +98,9 @@ def f_active_nodes_get(xml_file_path, user_name, key_path):
 
 def f_set_env(xml_file_path, user_name, key_path, env_install_file_path):
     ssh_ips = f_map_ssh_ip_get(xml_file_path)
+    print("Extracted (node, ssh ip) pairs from manifest: {}".format(ssh_ips))
     threads = []
-    print("Start configuring the environment for all the nodes.")
+    print("Start configuring the environment for all the nodes. Please wait...")
     for node_name, ssh_ip in ssh_ips.items():
         thread = threading.Thread(
             target=f_set_env_single_node,
@@ -110,7 +111,7 @@ def f_set_env(xml_file_path, user_name, key_path, env_install_file_path):
         thread.start()
     for thread in threads:
         thread.join()
-    print("Finish configuring the environment for all the nodes.")
+    print("Finish configuring the environment for all the nodes!")
 
 
 def f_folders_send(xml_file_path, user_name, key_path, base_path, nodes_config):

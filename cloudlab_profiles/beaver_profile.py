@@ -16,10 +16,12 @@ configuration when your experiment ends."""
 
 # Import the Portal object.
 import geni.portal as portal
-# Import the ProtoGENI library.
-import geni.rspec.pg as pg
+
 # Import the Emulab specific extensions.
 import geni.rspec.emulab as emulab
+
+# Import the ProtoGENI library.
+import geni.rspec.pg as pg
 
 # Create a portal context.
 pc = portal.Context()
@@ -28,12 +30,17 @@ pc = portal.Context()
 request = pc.makeRequestRSpec()
 pc.defineParameter("N", "Number of Nodes", portal.ParameterType.INTEGER, 5)
 pc.defineParameter("type", "Type of Nodes", portal.ParameterType.STRING, "xl170")
-pc.defineParameter("phystype", "Switch type", portal.ParameterType.STRING, "dell-s4048",
-                   [('mlnx-sn2410', 'Mellanox SN2410'),('dell-s4048',  'Dell S4048')])
+pc.defineParameter(
+    "phystype",
+    "Switch type",
+    portal.ParameterType.STRING,
+    "dell-s4048",
+    [("mlnx-sn2410", "Mellanox SN2410"), ("dell-s4048", "Dell S4048")],
+)
 # Retrieve the values the user specifies during instantiation.
 params = pc.bindParameters()
-if params.N < 2:
-    pc.reportError(portal.ParameterError("You must choose at least 2 nodes"))
+if params.N < 6:
+    pc.reportError(portal.ParameterError("You must choose at least 6 xl170 nodes"))
 
 # Count for node name.
 
@@ -50,14 +57,14 @@ for i in range(params.N):
     iface = node.addInterface("eth2")
     iface.addAddress(pg.IPv4Address("192.168." + str(i + 1) + ".2", "255.255.255.0"))
     ifaces_data_plane.append(iface)
-    
+
 node = request.RawPC("external")
 node.hardware_type = "c220g2"
 
-# Now add the link to the rspec. 
+# Now add the link to the rspec.
 
 all_swiface = []
-mysw = request.Switch("mysw");
+mysw = request.Switch("mysw")
 mysw.hardware_type = params.phystype
 for i in range(params.N):
     swiface = mysw.addInterface()
@@ -69,7 +76,7 @@ for iface in ifaces_ctrl_plane:
 
 all_link = []
 for i in range(params.N):
-    link = request.L1Link("link"+str(i+1))
+    link = request.L1Link("link" + str(i + 1))
     link.addInterface(ifaces_data_plane[i])
     link.addInterface(all_swiface[i])
     all_link.append(link)
