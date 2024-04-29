@@ -43,7 +43,7 @@ def f_args_parse():
         "-m",
         "--manifest_path",
         type=str,
-        default="manifest_files/manifest.xml",
+        default="cloudlab/manifest.xml",
         help="Manifest file path.",
     )
     subparsers = parser.add_subparsers(dest="type", required=True, help="Options")

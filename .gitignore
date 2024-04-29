@@ -1,7 +1,7 @@
-*.txt
+*.swp
+config.json
 .vscode/
 .DS_Store
 __pycache__
-config.json
 results/
 .VSCodeCounter/
