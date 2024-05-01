@@ -15,7 +15,7 @@ It also packages the automated scripts for the ease of setting up the environmen
 checksums, NAT caching in a shared eBPF map, and the de-encapsulation of incoming packets) and Beaver's in-group process logic. It also includes the Linux tc to look up the NAT entries and perform the header transformations to replicate Direct Server Return (DSR).
 * `client/`: A sample client implementation.
 * `controller/`: Beaver's controller server that initiates, controls, collects the results of the snapshots. It also applies the detection algorithm for verifying the snapshots.
-* `load_balancer`: The software load balancer implementation that emulates the typical behvaiors using DPDK, including consistent hashing, caching, SLB-forwarding based on Virtual IP (VIP), and encapsulation. It also includes the optimistic gateway marking logic for Beaver.
+* `load_balancer/`: The software load balancer implementation that emulates the typical behvaiors using DPDK, including consistent hashing, caching, SLB-forwarding based on Virtual IP (VIP), and encapsulation. It also includes the optimistic gateway marking logic for Beaver.
 * `uilts/`: The utility scripts for automating the experiments.
 
 ## Resource Requirements
@@ -40,7 +40,7 @@ The maximum scale experiment requires a minimum reservation of 34 xl170 machines
 We provide set-by-step instructions for reserving Beaver's resources on CloudLab and setting up the environment.
 These steps need to be followed for each new CloudLab reservation.
 
-0. Clone the Beaver repository and navigate to the root directory. Install the python3 dependencies for automated experiment management on remote machines from the local desktop: `pip3 install -r requirements.txt`.
+0. Clone the Beaver repository and navigate to the root directory. Install the python3 dependencies for automated experiment management of remote machines from the local desktop: `pip3 install -r requirements.txt`.
 
 1. Instantiate an experiment on CloudLab using the profile `cloudlab/beaver_profile.py` described above.
 
@@ -52,10 +52,13 @@ These steps need to be followed for each new CloudLab reservation.
 
 ![cloudlab_reservation_topo.png](img/cloudlab_reservation_topo.png)
 
-4. Once the experiments are ready, copy the XML contents under the `manifest` column (right next to the `List View` column) on the experiment profile page, and replace the contents in `cloudlab/manifest.xml` file.
+4. Wait until the CloudLab experiment page shows status ready (it takes ~10 minutes for provisioning the `dell-s4048` before showing status ready). Then copy the XML contents under the `manifest` column (right next to the `List View` column) on the experiment profile page, and replace the contents in `cloudlab/manifest.xml` file.
 
 5. Install dependencies on all machines in parallel by using `python3 beaver.py env` subcommand with the CloudLab user name (`--user_name`/`-u`) and the SSH private key file path (`--ssh_key` / `-k`).
-   
-* Example command: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu env`.
-* By default, it will reads the manifest file of path `cloudlab/manifest.xml` to extract the information for the CloudLab machines. Otherwise, specify the path to the manifest file using the `--manifest` / `-m` option.
-* The whole process takes around 20 minutes to complete. The terminal will print `Finish configuring the environment for all the nodes!` to indicate successful installation.
+   * Example command: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu env`.
+   * By default, it will reads the manifest file of path `cloudlab/manifest.xml` to extract the information for the CloudLab machines. Otherwise, specify the path to the manifest file using the `--manifest` / `-m` option.
+   * The whole process takes around 20 minutes to complete. The terminal will print `Finish configuring the environment for all the nodes!` to indicate successful installation.
+
+## Instructions for Reproducing the Experiments
+
+TBA

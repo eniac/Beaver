@@ -28,8 +28,8 @@ pc = portal.Context()
 
 # Create a Request object to start building the RSpec.
 request = pc.makeRequestRSpec()
-pc.defineParameter("N", "Number of Nodes", portal.ParameterType.INTEGER, 5)
-pc.defineParameter("type", "Type of Nodes", portal.ParameterType.STRING, "xl170")
+pc.defineParameter("N", "Number of xl170 nodes", portal.ParameterType.INTEGER, 6)
+pc.defineParameter("type", "Type of nodes", portal.ParameterType.STRING, "xl170")
 pc.defineParameter(
     "phystype",
     "Switch type",

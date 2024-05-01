@@ -73,8 +73,8 @@ def f_rate_config(xml_file_path, user_name, key_path, lb_num, base_path):
     f_compile(xml_file_path, user_name, key_path, nodes_config)
     f_sw_config_gene(xml_file_path, nodes_config["load_balancer"])
     print(
-        "Have finsih all the configurations,"
-        "please use the output commands to configure the switch."
+        "Finsihed all the configurations."
+        "Please copy the commands above to the CloudLab switch console."
     )
 
 
