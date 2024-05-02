@@ -1,6 +1,7 @@
 #ifndef NAT_H_
 #define NAT_H_
 
+#include <linux/types.h>
 #include <bpf/bpf_endian.h>
 #include <bpf/bpf_helpers.h>
 #include <linux/bpf.h>

@@ -36,4 +36,4 @@ sudo ufw allow 514/udp
 # Install JSON library for C++ and create a symbolic link for include path
 sudo apt-get install -y libjsoncpp-dev
 sudo ln -s /usr/include/jsoncpp/json/ /usr/include/json
-sudo ip route add 192.168.100.0/24 dev eno50np1
+sudo ip route add 192.168.0.0/16 dev eno50np1
