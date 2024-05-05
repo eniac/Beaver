@@ -10,7 +10,7 @@ By exploiting the placement of software load balancers in data center networks a
   - [Instructions for Reproducing the Experiments](#instructions-for-reproducing-the-experiments)
     - [Getting Started (Read Carefully Before Starting)](#getting-started-read-carefully-before-starting)
     - [Reproduce Figure 10(a) and 10(b)](#reproduce-figure-10a-and-10b)
-    - [Reproduce Figure 11 (TODO)](#reproduce-figure-11-todo)
+    - [Reproduce Figure 11](#reproduce-figure-11)
     - [Reproduce Figure 12 (TODO)](#reproduce-figure-12-todo)
     - [Reproduce Figure 13 (TODO)](#reproduce-figure-13-todo)
     - [Reproduce Figure 14 (TODO)](#reproduce-figure-14-todo)
@@ -102,7 +102,7 @@ These steps need to be followed for each new CloudLab reservation.
 * In principle, **each experiment run** requires a mandatory config phase (before run) and a mandatory clear phase (after run), unless it shares the same switch configuration with another experiment:
   * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console. It will also complain `The number of booked nodes is not enough,please reduce the scale.` if the effective number of xl170 nodes (due to faulty links) is less than required for the experiment.
   * Run phase: `beaver.py` will run the experiment automatically and collect the results.
-  * Clear phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console to reset the switch state.
+  * Clear phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console to reset the switch state and clear up folders on the remote machines.
 
 **IMPORTANT: notes to copy the auto-generated commands to the switch console**
 
@@ -118,13 +118,13 @@ These steps need to be followed for each new CloudLab reservation.
 
 Please follow the command below **in order** to obtain the snapshot frequency without or with parallelism, when `|G|=2` (requiring 6 xl170 nodes), remember to replace `leoyu` and `.ssh/leoyu` with your CloudLab username and SSH private key path:
 
-1. Run config subcommand without parallelism: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o config`.
+1. Run config subcommand without parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o config`.
 
 2. Copy all printed switch commands starting with the line with enable (inclusive) to the CloudLab switch console. Remember to hit `ENTER` to ensure the appearance of the `DellEMC>` prompt before and after copying the commands per guidance above.
 
-3. Run experiment with `|G|=2` without parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o run`
+3. Run experiment with `|G|=2` without parallelism (~1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o run`
 
-4. The digest of the experiment including the snapshot frequency number will be printed on the terminal and saved to `results/freq/freq_2_<timestamp>.txt`. One may run step 3 multiple times.
+4. The digest of the experiment including the snapshot frequency number will be printed on the terminal and saved to `results/freq/freq_2_<timestamp>.txt`. One can run step 3 multiple times to sample multiple measurements.
 
 5. Run experiment with `|G|=2` with parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -p -s 2 -o run`
    * Note that this experiment shares the same switch configuration so no need to execute the clear phase after the previous run and the config phase before this run.
@@ -133,10 +133,38 @@ Please follow the command below **in order** to obtain the snapshot frequency wi
 
 7. Run clear subcommand **AND copy the auto-generated switch commands** to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o clear`.
 
-To obtain the snapshot frequency for larger `|G|`, one needs to reserve more xl170 nodes.
-For instance, for `|G|=4`, repeat step 1 to 7 one-by-one except replacing the scale argument `-s 2` with `-s 4`.
+To obtain the snapshot frequency for larger `|G|`:
 
-### Reproduce Figure 11 (TODO)
+* One needs to reserve more xl170 nodes.
+* Repeat step 1 to 7 one-by-one except replacing the scale argument `-s 2`. E.g., for `|G|=4`, use `-s 4`.
+* The precise numbers may vary across runs, but the trends should be consistent: (1) The snapshot frequency with parallelism is significantly higher than that without parallelism, and (2) the snapshot frequency decreases as the scale increases on average.
+
+### Reproduce Figure 11
+
+Follow the command below **in order** to obtain the effective snapshot rate for different snapshot frequencies, given `|G|=2`:
+
+1. Run config subcommand (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 1024 -o config`
+
+2. Copy the generated switch commands to the console as before.
+
+3. Run experiment with frequency 1024: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 1024 -o run`
+   * Results with effective snapshot rate will be printed and fetched to `results/accuracy/freq_1024_2_<timestamp>.txt`.
+
+4. Similarly, run the commands below to sample results for 2048, 4096, 8192, 16384, 32768, 65536, and 131072 frequencies, which share the same configuration of switches etc:
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 2048 -o run`
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 4096 -o run`
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 8192 -o run`
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 16384 -o run`
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 32768 -o run`
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 65536 -o run`
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 131072 -o run`
+
+5. Run clear subcommand **AND copy the auto-generated switch commands** to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 1024 -o clear`.
+
+To obtain the snapshot frequency for larger `|G|`:
+
+* Repeat step 1 to 5 one-by-one except replacing the scale argument `-s 2`. E.g., for `|G|=4`, use `-s 4`. Note that 131072 is not achievable for `|G|=16`.
+* The precise numbers may vary across runs, but one should expect the effective snapshot rate to be close to 1 (that is, 100%).
 
 ### Reproduce Figure 12 (TODO)
 
