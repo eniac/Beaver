@@ -59,9 +59,11 @@ These steps need to be followed for each new CloudLab reservation.
    * By default, it will reads the manifest file of path `cloudlab/manifest.xml` to extract the information for the CloudLab machines. Otherwise, specify the path to the manifest file using the `--manifest` / `-m` option.
    * The whole process takes around ~20 minutes to complete. The terminal will print `Finish configuring the environment for all the nodes!` to indicate successful environment set up.
 
-## Instructions for Reproducing the Experiments
+6. Find the CloudLab s4048 switch console. Goto the `List View` of the CloudLab experiment profile => click the setting icon on the right of the page for the `dell-s4048` switch row => click `Console`.
+   * We seeked to automate the experiments as much as possible. However, the only way to interact with the CloudLab s4048 switch is through typing the commands on CloudLab switch console webpage manually.
+   * To make it easier, **each group of experiments** involves a **config step** (which **varies across experiments** due to changes in topologies!) that will print the switch commands to be copied to the switch console, AND a clear step which produces the commands to copy to the console to reset the switch state for the next experiment.
 
-TBA
+![cloudlab_switch_console.png](img/cloudlab_switch_console.png)
 
 ## Further Questions
 
