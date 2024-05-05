@@ -2,11 +2,11 @@
 
 # Extract the commit message from the provided file.
 commit_msg_file="$1"
-commit_msg=$(<"$commit_msg_file")
+# Sanitize the commit message by stripping out lines that start with #.
+commit_msg=$(grep -v '^#' "$commit_msg_file" | xargs)
 
 # Define the conventional commit regex pattern.
-pattern="^(feat|fix|docs|style|refactor|test|chore|build)(\([^()]*\))?: [A-Z].*"
-
+pattern="^(feat|fix|docs|style|refactor|test|chore|build)(\([^()]*\))?: [A-Z].*[^.]$"
 # Check if the commit message matches the pattern.
 if [[ ! $commit_msg =~ $pattern ]]; then
     echo "ERROR: Commit message does not follow the convention."
@@ -21,8 +21,9 @@ if [[ ! $commit_msg =~ $pattern ]]; then
     exit 1
 fi
 
-# Ensure there is a blank line between the subject line and the body (if any).
-if [[ $(awk 'NR==2{print $0}' "$commit_msg_file") != "" ]]; then
+num_lines=$(echo "$commit_msg" | wc -l)
+# Ensure there is a blank line between the subject line and the body if there is a body.
+if (( num_lines > 1 )) && [[ $(echo "$commit_msg" | awk 'NR==2') != "" ]]; then
     echo "ERROR: The subject line must be followed by a blank line."
     echo
     exit 1
