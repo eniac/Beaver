@@ -11,10 +11,10 @@ By exploiting the placement of software load balancers in data center networks a
     - [Getting Started (Read Carefully Before Starting)](#getting-started-read-carefully-before-starting)
     - [Reproduce Figure 10(a) and 10(b)](#reproduce-figure-10a-and-10b)
     - [Reproduce Figure 11](#reproduce-figure-11)
-    - [Reproduce Figure 12 (TODO)](#reproduce-figure-12-todo)
-    - [Reproduce Figure 13 (TODO)](#reproduce-figure-13-todo)
-    - [Reproduce Figure 14 (TODO)](#reproduce-figure-14-todo)
-    - [Reproduce Table 3 (TODO)](#reproduce-table-3-todo)
+    - [Reproduce Figure 12](#reproduce-figure-12)
+    - [Reproduce Figure 13](#reproduce-figure-13)
+    - [Reproduce Figure 14](#reproduce-figure-14)
+    - [Reproduce Table 3](#reproduce-table-3)
   - [Further Questions](#further-questions)
 
 ## Repo Structure
@@ -118,7 +118,7 @@ These steps need to be followed for each new CloudLab reservation.
 
 Please follow the command below **in order** to obtain the snapshot frequency without or with parallelism, when `|G|=2` (requiring 6 xl170 nodes), remember to replace `leoyu` and `.ssh/leoyu` with your CloudLab username and SSH private key path:
 
-1. Run config subcommand without parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o config`.
+1. Run config phase without parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o config`.
 
 2. Copy all printed switch commands starting with the line with enable (inclusive) to the CloudLab switch console. Remember to hit `ENTER` to ensure the appearance of the `DellEMC>` prompt before and after copying the commands per guidance above.
 
@@ -131,7 +131,7 @@ Please follow the command below **in order** to obtain the snapshot frequency wi
 
 6. The digest of the experiment including the snapshot frequency number with parallelism will be printed on the terminal and saved to `results/freq/freq_para_2_<timestamp>.txt`.
 
-7. Run clear subcommand **AND copy the auto-generated switch commands** to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o clear`.
+7. Run clear phase **AND copy the auto-generated switch commands** to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o clear`.
 
 To obtain the snapshot frequency for larger `|G|`:
 
@@ -143,7 +143,7 @@ To obtain the snapshot frequency for larger `|G|`:
 
 Follow the command below **in order** to obtain the effective snapshot rate for different snapshot frequencies, given `|G|=2`:
 
-1. Run config subcommand (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 1024 -o config`
+1. Run config phase (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 1024 -o config`
 
 2. Copy the generated switch commands to the console as before.
 
@@ -159,22 +159,50 @@ Follow the command below **in order** to obtain the effective snapshot rate for 
    * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 65536 -o run`
    * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 131072 -o run`
 
-5. Run clear subcommand **AND copy the auto-generated switch commands** to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 1024 -o clear`.
+5. Run clear phase **AND copy the auto-generated switch commands** to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu accuracy -s 2 -f 1024 -o clear`.
 
-To obtain the snapshot frequency for larger `|G|`:
+To obtain the effective snapshot rate for larger `|G|`:
 
 * Repeat step 1 to 5 one-by-one except replacing the scale argument `-s 2`. E.g., for `|G|=4`, use `-s 4`. Note that 131072 is not achievable for `|G|=16`.
 * The precise numbers may vary across runs, but one should expect the effective snapshot rate to be close to 1 (that is, 100%).
 
-### Reproduce Figure 12 (TODO)
+### Reproduce Figure 12
 
-### Reproduce Figure 13 (TODO)
+Detailed notes TBA.
 
-### Reproduce Figure 14 (TODO)
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o config`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o clear`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o config`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o clear`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o config`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o clear`
 
-### Reproduce Table 3 (TODO)
+### Reproduce Figure 13
 
+Detailed notes TBA.
 
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o config`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o clear`
+
+### Reproduce Figure 14
+
+Detailed notes TBA.
+
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s <max scale> -lt <type> -ss -o config`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s <max scale> -lt <type> -ss -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s <max scale> -lt <type> -ss -o clear`
+
+### Reproduce Table 3
+
+Detailed notes TBA.
+
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r <ratio> -st <snapshot_type> -o config`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r <ratio> -st <snapshot_type> -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r <ratio> -st <snapshot_type> -o clear`
 
 ## Further Questions
 

@@ -309,7 +309,7 @@ f_ss_pkts_recv(__attribute__((unused)) void* arg)
         (ss_end_time - ss_start_time) / (uint64_t)1e9,
         (ss_end_time - ss_start_time) % (uint64_t)1e9);
     output_freq << buffer;
-    snprintf(buffer, sizeof(buffer), "Accuracy of snapshots: %f\n", (float)qualified_ss_num / g_max_ss_id);
+    snprintf(buffer, sizeof(buffer), "Effective snapshot rate: %f\n", (float)qualified_ss_num / g_max_ss_id);
     output_freq << buffer;
     snprintf(
         buffer,
