@@ -1,0 +1,5 @@
+#!/bin/bash
+if git diff --cached --name-only | grep -q "cloudlab/manifest.xml"; then
+    echo "Error: Committing changes to cloudlab/manifest.xml is not allowed."
+    exit 1
+fi

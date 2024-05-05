@@ -40,7 +40,7 @@ The maximum scale experiment requires a minimum reservation of 34 xl170 machines
 We provide set-by-step instructions for reserving Beaver's resources on CloudLab and setting up the environment.
 These steps need to be followed for each new CloudLab reservation.
 
-0. Clone the Beaver repository and navigate to the root directory. Install the python3 dependencies for automated experiment management of remote machines from the local desktop: `pip3 install -r requirements.txt`.
+0. Clone the Beaver repository and navigate to the root directory. Run `./setup.sh` to install the python3 dependencies for automated experiment management of remote machines from the local desktop.
 
 1. Instantiate an experiment on CloudLab using the profile `cloudlab/beaver_profile.py` described above.
 
@@ -57,8 +57,14 @@ These steps need to be followed for each new CloudLab reservation.
 5. Install dependencies on all machines in parallel by using `python3 beaver.py env` subcommand with the CloudLab user name (`--user_name`/`-u`) and the SSH private key file path (`--ssh_key` / `-k`).
    * Example command: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu env`.
    * By default, it will reads the manifest file of path `cloudlab/manifest.xml` to extract the information for the CloudLab machines. Otherwise, specify the path to the manifest file using the `--manifest` / `-m` option.
-   * The whole process takes around 20 minutes to complete. The terminal will print `Finish configuring the environment for all the nodes!` to indicate successful installation.
+   * The whole process takes around ~20 minutes to complete. The terminal will print `Finish configuring the environment for all the nodes!` to indicate successful environment set up.
 
 ## Instructions for Reproducing the Experiments
 
 TBA
+
+## Further Questions
+
+For more details, please refer to the paper Beaver: Practical Partial Snapshots for Distributed Cloud Services (OSDI 2024).
+
+Feel free to post issues if any question arises or email `leoyu@seas.upenn.edu`.
