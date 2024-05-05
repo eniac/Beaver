@@ -59,11 +59,29 @@ These steps need to be followed for each new CloudLab reservation.
    * By default, it will reads the manifest file of path `cloudlab/manifest.xml` to extract the information for the CloudLab machines. Otherwise, specify the path to the manifest file using the `--manifest` / `-m` option.
    * The whole process takes around ~20 minutes to complete. The terminal will print `Finish configuring the environment for all the nodes!` to indicate successful environment set up.
 
-6. Find the CloudLab s4048 switch console. Goto the `List View` of the CloudLab experiment profile => click the setting icon on the right of the page for the `dell-s4048` switch row => click `Console`.
+6. Goto the CloudLab s4048 switch console: goto the `List View` of the CloudLab experiment profile => click the setting icon on the right of the page for the `dell-s4048` switch row => click `Console`.
    * We seeked to automate the experiments as much as possible. However, the only way to interact with the CloudLab s4048 switch is through typing the commands on CloudLab switch console webpage manually.
-   * To make it easier, **each group of experiments** involves a **config step** (which **varies across experiments** due to changes in topologies!) that will print the switch commands to be copied to the switch console, AND a clear step which produces the commands to copy to the console to reset the switch state for the next experiment.
+   * To make it easier, **each group of experiments** involves a **config step** (which **varies across experiments** due to changes in topologies etc!) that will print the switch commands to be copied to the switch console, AND a clear step which produces the commands to copy to the console to reset the switch state for the next experiment.
 
 ![cloudlab_switch_console.png](img/cloudlab_switch_console.png)
+
+## Instructions for Reproducing the Experiments
+
+### Getting Started (Read Carefully Before Starting)
+
+* Read `Resource Requirements` section and instantiate the CloudLab experiment using the provided profile.
+  * The minimum number of xl170 nodes to reserve is 6 for a scale of 2 SLBs (`|G|=2`).
+  * The minimum number of xl170 nodes for larger scales: 10 for `|G|=4`, 14 for `|G|=6`, 18 for `|G|=8`, 22 for `|G|=10`, 26 for `|G|=12`, 30 for `|G|=14`, and 34 for `|G|=16`.
+* Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` for each new CloudLab experiment reservation.
+* Note that each group of experiments involve 3 phases:
+  * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console.
+  * Run phase: `beaver.py` will run the experiment automatically and collect the results.
+  * Clear phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console to reset the switch state.
+
+**IMPORTANT: notes to copy the auto-generated commands to the switch console**
+
+* Before copying command, hit `ENTER` to make sure you see the `DellEMC(conf)>` prompt on the console.
+* After copying the commands and waiting for its execution (typically takes around 10 seconds), hit `ENTER` again to make sure the last command line is executed as well. `DellEMC>` (rather than, e.g., `DellEMC(conf)>`) will appear right after.
 
 ## Further Questions
 
