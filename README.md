@@ -71,17 +71,56 @@ These steps need to be followed for each new CloudLab reservation.
 
 * Read `Resource Requirements` section and instantiate the CloudLab experiment using the provided profile.
   * The minimum number of xl170 nodes to reserve is 6 for a scale of 2 SLBs (`|G|=2`).
-  * The minimum number of xl170 nodes for larger scales: 10 for `|G|=4`, 14 for `|G|=6`, 18 for `|G|=8`, 22 for `|G|=10`, 26 for `|G|=12`, 30 for `|G|=14`, and 34 for `|G|=16`.
+  * See the table below for the minimum number of xl170 nodes for larger scales.
+
+| `\|G\|` | Min # of xl170 nodes |
+| ------- | -------------------- |
+| 2       | 6                    |
+| 4       | 10                   |
+| 6       | 14                   |
+| 8       | 18                   |
+| 10      | 22                   |
+| 12      | 26                   |
+| 14      | 30                   |
+| 16      | 34                   |
+
 * Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` for each new CloudLab experiment reservation.
 * Note that each group of experiments involve 3 phases:
-  * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console.
+  * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console. It will also complain `The number of booked nodes is not enough,please reduce the scale.` if the effective number of xl170 nodes (due to faulty links) is less than required for the experiment.
   * Run phase: `beaver.py` will run the experiment automatically and collect the results.
   * Clear phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console to reset the switch state.
 
 **IMPORTANT: notes to copy the auto-generated commands to the switch console**
 
 * Before copying command, hit `ENTER` to make sure you see the `DellEMC(conf)>` prompt on the console.
+
+![cloudlab_switch_console_before_copy.png](img/cloudlab_switch_console_before_copy.png)
+
 * After copying the commands and waiting for its execution (typically takes around 10 seconds), hit `ENTER` again to make sure the last command line is executed as well. `DellEMC>` (rather than, e.g., `DellEMC(conf)>`) will appear right after.
+
+![cloudlab_switch_console_after_copy.png](img/cloudlab_switch_console_after_copy.png)
+
+### Reproduce Figure 10(a) and 10(b)
+
+Please follow the command below **in order** to obtain the snapshot frequency without or with parallelism, when `|G|=2` (requiring 6 xl170 nodes), remember to replace `leoyu` and `.ssh/leoyu` with your CloudLab username and SSH private key path:
+
+1. Run config subcommand without parallelism: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o config`.
+
+2. Copy all printed switch commands starting with the line with enable (inclusive) to the CloudLab switch console. Remember to hit `ENTER` to ensure the appearance of the `DellEMC>` prompt before and after copying the commands per guidance above.
+
+3. Run experiment with `|G|=2` without parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o run`
+
+4. The digest of the experiment including the snapshot frequency number will be printed on the terminal and saved to `results/freq/freq_2_<timestamp>.txt`. One may run step 3 multiple times.
+
+5. Run experiment with `|G|=2` with parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -p -s 2 -o run`
+   * Note that this experiment shares the same switch configuration so no need to execute the clear phase and cconfig phase again.
+
+6. The digest of the experiment including the snapshot frequency number with parallelism will be printed on the terminal and saved to `results/freq/freq_para_2_<timestamp>.txt`.
+
+7. Run clear subcommand AND copy the auto-generated switch commands to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o clear`.
+
+To obtain the snapshot frequency for larger `|G|`, one needs to reserve more xl170 nodes and follow the same steps above.
+The workflow from step 1 to 7 is the same except replacing the scale argument `-s 2` with `-s 4`, `-s 6`, `-s 8`, `-s 10`, `-s 12`, `-s 14`, and `-s 16` respectively.
 
 ## Further Questions
 
