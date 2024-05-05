@@ -193,7 +193,7 @@ def f_rate_run(
     )
     time_name = datetime.datetime.now()
     timestamp = time_name.strftime("%Y%m%d%H%M%S")
-    real_scale = scale * 64
+    real_scale = scale
     file_name = f"freq_{real_scale}_{timestamp}.txt"
     if if_parallel:
         file_name = f"freq_para_{real_scale}_{timestamp}.txt"
@@ -233,7 +233,7 @@ def f_bound_run(xml_file_path, user_name, key_path, config_file_path):
     f_bound_ss_deploy(xml_file_path, user_name, key_path, nodes_config)
     time_name = datetime.datetime.now()
     timestamp = time_name.strftime("%Y%m%d%H%M%S")
-    real_scale = scale * 64
+    real_scale = scale
     file_name = f"bound_{real_scale}_{timestamp}.txt"
     local_file_path = os.path.join("results/bound/", file_name)
     f_bound_ss_result_pull(
@@ -269,7 +269,7 @@ def f_accuracy_run(xml_file_path, user_name, key_path, config_file_path, frequen
     f_accuracy_ss_deploy(xml_file_path, user_name, key_path, nodes_config, frequency)
     time_name = datetime.datetime.now()
     timestamp = time_name.strftime("%Y%m%d%H%M%S")
-    real_scale = scale * 64
+    real_scale = scale
     file_name = f"freq_{frequency}_{real_scale}_{timestamp}.txt"
     local_file_path = os.path.join("results/accuracy/", file_name)
     f_accuracy_ss_result_pull(
@@ -313,7 +313,7 @@ def f_load_run(
             xml_file_path, user_name, key_path, requests, details
         )
         time.sleep(45)
-        real_scale = scale * 64
+        real_scale = scale
         time_name = datetime.datetime.now()
         timestamp = time_name.strftime("%Y%m%d%H%M%S")
         file_name_prefix = f"iperf_{real_scale}_{details}_{timestamp}"
@@ -340,7 +340,7 @@ def f_load_run(
         f_load_cassandra_request(xml_file_path, user_name, key_path, requests, details)
         time_name = datetime.datetime.now()
         timestamp = time_name.strftime("%Y%m%d%H%M%S")
-        real_scale = scale * 64
+        real_scale = scale
         file_name = f"ycsb_{real_scale}_{details}_{timestamp}.txt"
         if if_snapshot:
             file_name = f"ycsb_ss_{real_scale}_{details}_{timestamp}.txt"

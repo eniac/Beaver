@@ -3,6 +3,20 @@
 Beaver is a practical partial snapshot protocol that guarantees causal consistency under external traffic interference.
 By exploiting the placement of software load balancers in data center networks and their associated communication pattern, Beaver not only requires minimal changes to today’s data center operations, but also eliminates any form of blocking to existing distributed communication and its related impact to user traffic.
 
+- [Beaver](#beaver)
+  - [Repo Structure](#repo-structure)
+  - [Resource Requirements](#resource-requirements)
+  - [Experiment Setup with CloudLab / Kick-the-tires Instructions](#experiment-setup-with-cloudlab--kick-the-tires-instructions)
+  - [Instructions for Reproducing the Experiments](#instructions-for-reproducing-the-experiments)
+    - [Getting Started (Read Carefully Before Starting)](#getting-started-read-carefully-before-starting)
+    - [Reproduce Figure 10(a) and 10(b)](#reproduce-figure-10a-and-10b)
+    - [Reproduce Figure 11 (TODO)](#reproduce-figure-11-todo)
+    - [Reproduce Figure 12 (TODO)](#reproduce-figure-12-todo)
+    - [Reproduce Figure 13 (TODO)](#reproduce-figure-13-todo)
+    - [Reproduce Figure 14 (TODO)](#reproduce-figure-14-todo)
+    - [Reproduce Table 3 (TODO)](#reproduce-table-3-todo)
+  - [Further Questions](#further-questions)
+
 ## Repo Structure
 
 The repo contains the prototype implementation of Beaver tested extensively on CloudLab.
@@ -85,7 +99,7 @@ These steps need to be followed for each new CloudLab reservation.
 | 16      | 34                   |
 
 * Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` for each new CloudLab experiment reservation.
-* Note that each group of experiments involve 3 phases:
+* In principle, **each experiment run** requires a mandatory config phase (before run) and a mandatory clear phase (after run), unless it shares the same switch configuration with another experiment:
   * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console. It will also complain `The number of booked nodes is not enough,please reduce the scale.` if the effective number of xl170 nodes (due to faulty links) is less than required for the experiment.
   * Run phase: `beaver.py` will run the experiment automatically and collect the results.
   * Clear phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console to reset the switch state.
@@ -113,14 +127,26 @@ Please follow the command below **in order** to obtain the snapshot frequency wi
 4. The digest of the experiment including the snapshot frequency number will be printed on the terminal and saved to `results/freq/freq_2_<timestamp>.txt`. One may run step 3 multiple times.
 
 5. Run experiment with `|G|=2` with parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -p -s 2 -o run`
-   * Note that this experiment shares the same switch configuration so no need to execute the clear phase and cconfig phase again.
+   * Note that this experiment shares the same switch configuration so no need to execute the clear phase after the previous run and the config phase before this run.
 
 6. The digest of the experiment including the snapshot frequency number with parallelism will be printed on the terminal and saved to `results/freq/freq_para_2_<timestamp>.txt`.
 
-7. Run clear subcommand AND copy the auto-generated switch commands to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o clear`.
+7. Run clear subcommand **AND copy the auto-generated switch commands** to the CloudLab switch console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o clear`.
 
-To obtain the snapshot frequency for larger `|G|`, one needs to reserve more xl170 nodes and follow the same steps above.
-The workflow from step 1 to 7 is the same except replacing the scale argument `-s 2` with `-s 4`, `-s 6`, `-s 8`, `-s 10`, `-s 12`, `-s 14`, and `-s 16` respectively.
+To obtain the snapshot frequency for larger `|G|`, one needs to reserve more xl170 nodes.
+For instance, for `|G|=4`, repeat step 1 to 7 one-by-one except replacing the scale argument `-s 2` with `-s 4`.
+
+### Reproduce Figure 11 (TODO)
+
+### Reproduce Figure 12 (TODO)
+
+### Reproduce Figure 13 (TODO)
+
+### Reproduce Figure 14 (TODO)
+
+### Reproduce Table 3 (TODO)
+
+
 
 ## Further Questions
 

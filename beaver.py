@@ -211,6 +211,7 @@ def f_args_parse():
 
 def main():
     args = f_args_parse()
+    # TODO(lc): Check if ssh key exists.
     if args.type == "env":
         f_set_env(args.manifest_path, args.user_name, args.ssh_key, "install_env.sh")
     elif args.type == "replace":
