@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Extract the commit message from the provided file.
+commit_msg_file="$1"
+commit_msg=$(<"$commit_msg_file")
+
+# Define the conventional commit regex pattern.
+pattern="^(feat|fix|docs|style|refactor|test|chore|build)(\([^()]*\))?: [A-Z].*"
+
+# Check if the commit message matches the pattern.
+if [[ ! $commit_msg =~ $pattern ]]; then
+    echo "ERROR: Commit message does not follow the convention."
+    echo
+    echo "A valid commit message should be in the format:"
+    echo "<type>(<optional scope>): <subject line>"
+    echo
+    echo "Where <type> is one of: feat, fix, docs, style, refactor, test, chore, build."
+    echo "The first word of the <subject line> must be capitalized."
+    echo
+    echo "Example: feat(parser): Add ability to parse arrays"
+    exit 1
+fi
+
+# Ensure there is a blank line between the subject line and the body (if any).
+if [[ $(awk 'NR==2{print $0}' "$commit_msg_file") != "" ]]; then
+    echo "ERROR: The subject line must be followed by a blank line."
+    echo
+    exit 1
+fi
