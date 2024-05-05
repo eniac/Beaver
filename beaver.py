@@ -77,7 +77,7 @@ def f_args_parse():
         "--scale",
         type=int,
         required=True,
-        choices=[128, 256, 384, 512, 640, 768, 896, 1024],
+        choices=[2, 4, 6, 8, 10, 12, 14, 16],
         help="Scale of the load balancers, must be specified.",
     )
     parser_ss_rate.add_argument(
@@ -111,7 +111,7 @@ def f_args_parse():
         "--scale",
         type=int,
         required=True,
-        choices=[128, 256, 384, 512, 640, 768, 896, 1024],
+        choices=[2, 4, 6, 8, 10, 12, 14, 16],
         help="Scale of the load balancers, must be specified.",
     )
     parser_ss_accuracy.add_argument(
@@ -119,7 +119,7 @@ def f_args_parse():
         "--scale",
         type=int,
         required=True,
-        choices=[128, 256, 384, 512, 640, 768, 896, 1024],
+        choices=[2, 4, 6, 8, 10, 12, 14, 16],
         help="Scale of the load balancers, must be specified.",
     )
     parser_ss_accuracy.add_argument(
@@ -147,7 +147,7 @@ def f_args_parse():
         "--scale",
         type=int,
         required=True,
-        choices=[128, 256, 384, 512, 640, 768, 896, 1024],
+        choices=[2, 4, 6, 8, 10, 12, 14, 16],
         help="Scale of the load balancers, must be specified.",
     )
     parser_load.add_argument(
@@ -222,7 +222,7 @@ def main():
             args.node_type,
         )
     elif args.type == "rate":
-        cluster_scale = args.scale // 64
+        cluster_scale = args.scale
         frequency_list1 = [
             300000,
             240000,
@@ -256,7 +256,7 @@ def main():
                 args.manifest_path, args.user_name, args.ssh_key, "config.json"
             )
     elif args.type == "bound":
-        cluster_scale = args.scale // 64
+        cluster_scale = args.scale
         if args.operation == "config":
             f_rate_config(
                 args.manifest_path, args.user_name, args.ssh_key, cluster_scale, "./"
@@ -268,7 +268,7 @@ def main():
                 args.manifest_path, args.user_name, args.ssh_key, "config.json"
             )
     elif args.type == "accuracy":
-        cluster_scale = args.scale // 64
+        cluster_scale = args.scale
         if args.operation == "config":
             f_rate_config(
                 args.manifest_path, args.user_name, args.ssh_key, cluster_scale, "./"
@@ -286,7 +286,7 @@ def main():
                 args.manifest_path, args.user_name, args.ssh_key, "config.json"
             )
     elif args.type == "load":
-        cluster_scale = args.scale // 64
+        cluster_scale = args.scale
         f_load_type_verify(args.load_type)
         if args.operation == "config":
             f_load_config(

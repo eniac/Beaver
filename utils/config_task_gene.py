@@ -65,6 +65,7 @@ def f_sw_config_gene(xml_file_path, lbs_index):
         sw_config_cmds.append(
             f"ip route 192.168.100.0 255.255.255.0 {lb_ip_data_plane}"
         )
+    sw_config_cmds.append("exit")
     print("Switch configuration:\n")
     for command in sw_config_cmds:
         print(command)
@@ -88,6 +89,7 @@ def f_sw_clear_gene(xml_file_path, lbs_index):
         sw_config_cmds.append(
             f"no ip route 192.168.100.0 255.255.255.0 {lb_ip_data_plane}"
         )
+    sw_config_cmds.append("exit")
     print("Switch configuration:\n")
     for command in sw_config_cmds:
         print(command)
