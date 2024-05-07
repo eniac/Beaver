@@ -1,6 +1,7 @@
 #ifndef LB_REDIRECT_H_
 #define LB_REDIRECT_H_
 
+#include <linux/types.h>
 #include <bpf/bpf_endian.h>
 #include <bpf/bpf_helpers.h>
 #include <linux/bpf.h>
