@@ -98,7 +98,7 @@ These steps need to be followed for each new CloudLab reservation.
 | 14      | 30                   |
 | 16      | 34                   |
 
-* Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` for each new CloudLab experiment reservation.
+* Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` to set up environment for each new CloudLab experiment reservation.
 * In principle, **each experiment run** requires a mandatory config phase (before run) and a mandatory clear phase (after run), unless it shares the same switch configuration with another experiment:
   * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console. It will also complain `The number of booked nodes is not enough,please reduce the scale.` if the effective number of xl170 nodes (due to faulty links) is less than required for the experiment.
   * Run phase: `beaver.py` will run the experiment automatically and collect the results.
@@ -198,11 +198,32 @@ Detailed notes TBA.
 
 ### Reproduce Table 3
 
-Detailed notes TBA.
+The experiments below only requires 6 valid xl170 nodes.
 
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r <ratio> -st <snapshot_type> -o config`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r <ratio> -st <snapshot_type> -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r <ratio> -st <snapshot_type> -o clear`
+1. Run config phase for the experiment: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st poll -o config`
+
+2. Copy the printed switch commands to the CloudLab portal. No need to run the clear phase as all experiments for Table 3 share the same switch configuration.
+
+3. Run the following commands to obtain TP, FP, TN, FN results for bot ratio = 0% for different approaches. After each run, the results will be printed and saved to `results/bot/bot_<snapshot_type>_<bot_ratio>_<timestamp>.txt`.
+   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st polling -o run`
+   * Laiyang (L-Y): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st laiyang -o run`
+   * Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st beaver -o run`
+
+4. To obtain results for bot ratio = 5%:
+   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.05 -st polling -o run`
+   * Laiyang (L-Y): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.05 -st laiyang -o run`
+   * Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.05 -st beaver -o run`
+
+5. To obtain results for bot ratio = 10%:
+   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st polling -o run`
+   * Laiyang (L-Y): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st laiyang -o run`
+   * Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st beaver -o run`
+
+
+Although the precise numbers may differ across runs, the expected observations are:
+* When bot ratio = 0%, Beaver should only give TN, whereas Polling and Laiyang may give FP.
+* When bot ratio = 5%, Beaver results are correct, that is, only TP or TN, whereas Polling and Laiyang may give FP or FN.
+* Similarly, when bot ratio = 10%, Beaver results are correct, that is, only TP or TN, whereas Polling and Laiyang may give FP or FN.
 
 ## Further Questions
 
