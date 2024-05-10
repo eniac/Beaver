@@ -69,7 +69,8 @@ f_load_balance_pkt(struct rte_mbuf* recv_pkt, struct rte_mbuf* mbuf_send, uint16
             timestamps.push_back(recv_timestamp);
             latency_results.push_back(latency);
         }
-        if (latency_results.size() % 100 == 0 && latency_results.size() > 0) {
+        // TODO(lc): Make the hardcoded number of recorded results configurable.
+        if (latency_results.size() % 1000 == 0 && latency_results.size() > 0) {
             std::ofstream output_file("latency.txt", std::ios::app);
             for (uint32_t i = 0; i < latency_results.size(); i++) {
                 output_file << latency_results[i] << "\n";
