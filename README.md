@@ -168,17 +168,26 @@ To obtain the effective snapshot rate for larger `|G|`:
 
 ### Reproduce Figure 12
 
-Detailed notes TBA.
+1. Sample measurements for the time to form the external causal chain for intra-DC setting:
+   * Run config phase AND copy the switch command to the CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o config`
+   * Run measurement with `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o run`
+     * The results (in nanoseconds) will be saved to `results/latency/latency_intra_<timestamp>.txt`.
+     * For faster experiment runs, each run samples 1000 measurements by default. One can run this step multiple times to sample more measurements.
+   * Run clear phase AND copy the switch command to the CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o clear`
+   * Expected observation: Typical numbers should be around 10s of us to 100s of us. For Beaver, what matters is the minimum, and the sampled measurements should be greater than 33us.
 
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o config`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o clear`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o config`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o clear`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o config`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o clear`
+2. For inter-DC setting:
+   * Run config phase AND copy the switch command to the CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o config`
+   * Similarly, run the experiment to sample measurement: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o run`
+     * The results (in nanoseconds) will be saved ti `results/latency/latency_inter_<timestamp>.txt`
+   * Run clear phase AND copy the switch command to the CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt inter -o clear`
+   * Expected observation: The typical numbers are around 10s of ms time scale, and much higher than intra-DC values. Again, what matters is that measurements are greater than the minimum 33us which should hold trivially.
+
+3. For internet settings:
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o config`
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o run`
+   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o clear`
+   * Expected observation: The concrete numbers may vary because it depends on the physical location of your local desktop. Typical values should be 10s of ms. Again, what matters is that measurements are greater than the minimum 33us which should hold trivially.
 
 ### Reproduce Figure 13
 
@@ -219,8 +228,9 @@ The experiments below only requires 6 valid xl170 nodes.
    * Laiyang (L-Y): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st laiyang -o run`
    * Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st beaver -o run`
 
+6. Run clear phase AND copy the printed switch commands to CloudLab portal: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st poll -o clear`
 
-Although the precise numbers may differ across runs, the expected observations are:
+Although the precise numbers may differ across runs, the key observations should hold:
 * When bot ratio = 0%, Beaver should only give TN, whereas Polling and Laiyang may give FP.
 * When bot ratio = 5%, Beaver results are correct, that is, only TP or TN, whereas Polling and Laiyang may give FP or FN.
 * Similarly, when bot ratio = 10%, Beaver results are correct, that is, only TP or TN, whereas Polling and Laiyang may give FP or FN.
