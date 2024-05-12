@@ -41,8 +41,8 @@ Beaver has been tested extensively on CloudLab, and the artifact automates the p
 * Due to CloudLab's [wiring constraints](https://docs.cloudlab.us/hardware.html) with dell-s4048 switches, the artifact requires xl170 machines for instantiating global controller, software load balancers, backend servers, and so on.
 
 * `cloudlab/beaver_profile.py` contains the profile for the ease of instantiating the experiment on Cloudlab, which includes 1 dell-s4048 switch, 1 `c220g2` node for the external client, and a user-specified number of `xl170` nodes.
-A **minimum specification of 5 xl170 machines** is required to execute the experiments, in addition to the switch and a `c220g2` node (which the profile instantiates by default).
-The maximum scale experiment requires a minimum reservation of 33 xl170 machines.
+A **minimum specification of 6 xl170 machines** is required to execute the experiments, in addition to the switch and a `c220g2` node (which the profile instantiates by default).
+The maximum scale experiment requires a minimum reservation of 34 xl170 machines.
 
 **Notes for resource reservation**
 
@@ -58,7 +58,7 @@ These steps need to be followed for each new CloudLab reservation.
 
 1. Instantiate an experiment on CloudLab using the profile `cloudlab/beaver_profile.py` described above.
 
-2. Specify a minimum of 5+1 xl170 nodes in the CloudLab reservation parameter. It is recommended to reserve more xl170 nodes (1 redundant node in this case) than the target (5 in this case) to account for potential faulty phy connectivity between xl170 nodes and the `dell-s4048` switch (see resource requirements above).
+2. Specify a minimum of 6 xl170 nodes in the CloudLab reservation parameter. It is recommended to reserve more xl170 nodes than the target to account for potential faulty phy connectivity between xl170 nodes and the `dell-s4048` switch (see resource requirements above).
 
 ![cloudlab_reservation_parameter.png](img/cloudlab_reservation_parameter.png)
 
@@ -84,19 +84,19 @@ These steps need to be followed for each new CloudLab reservation.
 ### Getting Started (Read Carefully Before Starting)
 
 * Read `Resource Requirements` section and instantiate the CloudLab experiment using the provided profile.
-  * The minimum number of xl170 nodes to reserve is 5 for a scale of 2 SLBs (`|G|=2`). Unless otherwise mentioned, this is sufficient for reproducing most experiments. Again, redundant nodes are recommended during reservation.
+  * The minimum number of xl170 nodes to reserve is 6 for a scale of 2 SLBs (`|G|=2`). Unless otherwise mentioned, this is sufficient for reproducing most experiments. Again, redundant nodes are recommended during reservation.
   * Some data points involve a larger scale configuration; see the table below for the minimum number of xl170 nodes required.
 
 | `\|G\|` | Min # of xl170 nodes |
 | ------- | -------------------- |
-| 2       | 5                    |
-| 4       | 9                    |
-| 6       | 13                   |
-| 8       | 17                   |
-| 10      | 21                   |
-| 12      | 25                   |
-| 14      | 29                   |
-| 16      | 33                   |
+| 2       | 6                    |
+| 4       | 10                   |
+| 6       | 14                   |
+| 8       | 18                   |
+| 10      | 22                   |
+| 12      | 26                   |
+| 14      | 30                   |
+| 16      | 34                   |
 
 * Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` to set up environment for each new CloudLab experiment reservation.
 * In principle, **each experiment run** requires a mandatory config phase (before run) and a mandatory clear phase (after run), unless it shares the same switch configuration with another experiment:
@@ -116,7 +116,7 @@ These steps need to be followed for each new CloudLab reservation.
 
 ### Reproduce Figure 10(a) and 10(b)
 
-Please follow the command below **in order** to obtain the snapshot frequency without or with parallelism, when `|G|=2` (requiring 5 working xl170 nodes), remember to replace `leoyu` and `.ssh/leoyu` with your CloudLab username and SSH private key path:
+Please follow the command below **in order** to obtain the snapshot frequency without or with parallelism, when `|G|=2` (requiring 6 working xl170 nodes), remember to replace `leoyu` and `.ssh/leoyu` with your CloudLab username and SSH private key path:
 
 1. Run config phase without parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o config`.
 
