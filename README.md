@@ -41,8 +41,8 @@ Beaver has been tested extensively on CloudLab, and the artifact automates the p
 * Due to CloudLab's [wiring constraints](https://docs.cloudlab.us/hardware.html) with dell-s4048 switches, the artifact requires xl170 machines for instantiating global controller, software load balancers, backend servers, and so on.
 
 * `cloudlab/beaver_profile.py` contains the profile for the ease of instantiating the experiment on Cloudlab, which includes 1 dell-s4048 switch, 1 `c220g2` node for the external client, and a user-specified number of `xl170` nodes.
-A **minimum specification of 6 xl170 machines** is required to execute the experiments, in addition to the switch and a `c220g2` node (which the profile instantiates by default).
-The maximum scale experiment requires a minimum reservation of 34 xl170 machines.
+A **minimum specification of 5 xl170 machines** is required to execute the experiments, in addition to the switch and a `c220g2` node (which the profile instantiates by default).
+The maximum scale experiment requires a minimum reservation of 33 xl170 machines.
 
 **Notes for resource reservation**
 
@@ -58,7 +58,7 @@ These steps need to be followed for each new CloudLab reservation.
 
 1. Instantiate an experiment on CloudLab using the profile `cloudlab/beaver_profile.py` described above.
 
-2. Specify a minimum of 6 xl170 nodes in the profile. It is recommended to reserve more xl170 nodes than the target to account for potential faulty phy connectivity between xl170 nodes and the `dell-s4048` switch (see resource requirements above).
+2. Specify a minimum of 5+1 xl170 nodes in the CloudLab reservation parameter. It is recommended to reserve more xl170 nodes (1 redundant node in this case) than the target (5 in this case) to account for potential faulty phy connectivity between xl170 nodes and the `dell-s4048` switch (see resource requirements above).
 
 ![cloudlab_reservation_parameter.png](img/cloudlab_reservation_parameter.png)
 
@@ -84,19 +84,19 @@ These steps need to be followed for each new CloudLab reservation.
 ### Getting Started (Read Carefully Before Starting)
 
 * Read `Resource Requirements` section and instantiate the CloudLab experiment using the provided profile.
-  * The minimum number of xl170 nodes to reserve is 6 for a scale of 2 SLBs (`|G|=2`).
-  * See the table below for the minimum number of xl170 nodes for larger scales.
+  * The minimum number of xl170 nodes to reserve is 5 for a scale of 2 SLBs (`|G|=2`). Unless otherwise mentioned, this is sufficient for reproducing most experiments. Again, redundant nodes are recommended during reservation.
+  * Some data points involve a larger scale configuration; see the table below for the minimum number of xl170 nodes required.
 
 | `\|G\|` | Min # of xl170 nodes |
 | ------- | -------------------- |
-| 2       | 6                    |
-| 4       | 10                   |
-| 6       | 14                   |
-| 8       | 18                   |
-| 10      | 22                   |
-| 12      | 26                   |
-| 14      | 30                   |
-| 16      | 34                   |
+| 2       | 5                    |
+| 4       | 9                    |
+| 6       | 13                   |
+| 8       | 17                   |
+| 10      | 21                   |
+| 12      | 25                   |
+| 14      | 29                   |
+| 16      | 33                   |
 
 * Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` to set up environment for each new CloudLab experiment reservation.
 * In principle, **each experiment run** requires a mandatory config phase (before run) and a mandatory clear phase (after run), unless it shares the same switch configuration with another experiment:
@@ -106,7 +106,7 @@ These steps need to be followed for each new CloudLab reservation.
 
 **IMPORTANT: notes to copy the auto-generated commands to the switch console**
 
-* Before copying command, hit `ENTER` to make sure you see the `DellEMC(conf)>` prompt on the console.
+* Before copying command, hit `ENTER` to make sure you see the `DellEMC>` prompt on the console.
 
 ![cloudlab_switch_console_before_copy.png](img/cloudlab_switch_console_before_copy.png)
 
@@ -116,7 +116,7 @@ These steps need to be followed for each new CloudLab reservation.
 
 ### Reproduce Figure 10(a) and 10(b)
 
-Please follow the command below **in order** to obtain the snapshot frequency without or with parallelism, when `|G|=2` (requiring 6 xl170 nodes), remember to replace `leoyu` and `.ssh/leoyu` with your CloudLab username and SSH private key path:
+Please follow the command below **in order** to obtain the snapshot frequency without or with parallelism, when `|G|=2` (requiring 5 working xl170 nodes), remember to replace `leoyu` and `.ssh/leoyu` with your CloudLab username and SSH private key path:
 
 1. Run config phase without parallelism (<1min): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu rate -s 2 -o config`.
 
@@ -191,7 +191,7 @@ To obtain the effective snapshot rate for larger `|G|`:
 
 ### Reproduce Figure 13
 
-Detailed notes TBA.
+*Detailed notes TBA.*
 
 * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o config`
 * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o run`
@@ -199,11 +199,33 @@ Detailed notes TBA.
 
 ### Reproduce Figure 14
 
-Detailed notes TBA.
+*Detailed notes TBA.*
 
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s <max scale> -lt <type> -ss -o config`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s <max scale> -lt <type> -ss -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s <max scale> -lt <type> -ss -o clear`
+**Reproduce Figure 14(a)**
+
+* Run config phase AND copy the switch command to CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-10 -o config`
+* Run experiment for iperf with load 20%:
+  * Without Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-20 -o run`
+  * With Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-20 -ss -o run`
+  * Results will be saved under `results/load_2_2_<timestamp>_<client_node_id>.txt`
+* Run clear phase AND copy the switch command to the CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-10 -o clear`
+
+Observation: Concrete numbers may vary, but the key is that the number with Beaver should not be significantly smaller than that without Beaver, and any discrepancy is a result of randomness in particular experiment runs.
+
+**Reproduce Figure 14(b)**
+
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o config`
+
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -o run` (~5min)
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-r -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-r -ss -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-s -o run`
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-s -ss -o run`
+
+* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o clear`
+
+Recommended (? actually larger scale may give more stable results) to use a scale of 2 (-s 2), but increasing the scale should give similar observations, that is close to 1.
 
 ### Reproduce Table 3
 
@@ -214,17 +236,17 @@ The experiments below only requires 6 valid xl170 nodes.
 2. Copy the printed switch commands to the CloudLab portal. No need to run the clear phase as all experiments for Table 3 share the same switch configuration.
 
 3. Run the following commands to obtain TP, FP, TN, FN results for bot ratio = 0% for different approaches. After each run, the results will be printed and saved to `results/bot/bot_<snapshot_type>_<bot_ratio>_<timestamp>.txt`.
-   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st polling -o run`
+   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st poll -o run`
    * Laiyang (L-Y): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st laiyang -o run`
    * Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st beaver -o run`
 
 4. To obtain results for bot ratio = 5%:
-   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.05 -st polling -o run`
+   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.05 -st poll -o run`
    * Laiyang (L-Y): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.05 -st laiyang -o run`
    * Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.05 -st beaver -o run`
 
 5. To obtain results for bot ratio = 10%:
-   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st polling -o run`
+   * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st poll -o run`
    * Laiyang (L-Y): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st laiyang -o run`
    * Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0.1 -st beaver -o run`
 
