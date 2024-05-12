@@ -81,9 +81,8 @@ def f_active_nodes_get(xml_file_path, user_name, key_path):
             match = re.search(r"node(\d+)", node_name)
             if match:
                 node_index = int(match.group(1))
-                if node_index != 1:
-                    with lock:
-                        active_nodes.append(node_index)
+                with lock:
+                    active_nodes.append(node_index)
 
     for node_name, ssh_ip in ssh_ips.items():
         if "node" in node_name:

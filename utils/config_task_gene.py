@@ -14,15 +14,18 @@ from utils.manifest_utils import (
 
 
 def f_nodes_config_gene(lb_num, active_nodes):
-    nodes_num = len(active_nodes) + 1
     required_nodes_num = lb_num * 2 + 2
-    if nodes_num < required_nodes_num:
-        print("The number of booked nodes is not enough," "please reduce the scale.")
+    print("Active # of xl170 nodes is {0}: {1}".format(len(active_nodes), active_nodes))
+    print("Required # of xl170 nodes is {0}".format(required_nodes_num))
+    if len(active_nodes) < required_nodes_num:
+        print(
+            "Insufficient number of valid xl170 nodes, please reduce the scale or reserve more xl170 nodes."
+        )
         exit(1)
-    controller_index = [1]
-    lbs_index = [active_nodes[i] for i in range(0, lb_num)]
-    backends_index = [active_nodes[i] for i in range(lb_num, 2 * lb_num)]
-    clients_index = [active_nodes[i] for i in range(2 * lb_num, len(active_nodes))]
+    controller_index = active_nodes[0]
+    lbs_index = [active_nodes[i] for i in range(1, lb_num + 1)]
+    backends_index = [active_nodes[i] for i in range(lb_num + 1, 2 * lb_num + 1)]
+    clients_index = [active_nodes[i] for i in range(2 * lb_num + 1, len(active_nodes))]
     nodes_config = {
         "controller": controller_index,
         "load_balancer": lbs_index,
