@@ -337,6 +337,8 @@ def main():
         if args.operation == "config":
             f_bot_config(args.manifest_path, args.user_name, args.ssh_key, "./")
         elif args.operation == "run":
+            if args.ratio < 0 or args.ratio > 1:
+                raise ValueError("Ratio must be between 0 and 1.")
             if args.snapshot_type == "beaver":
                 f_bot_beaver_run(
                     args.manifest_path,
