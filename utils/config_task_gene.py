@@ -22,7 +22,7 @@ def f_nodes_config_gene(lb_num, active_nodes):
             "Insufficient number of valid xl170 nodes, please reduce the scale or reserve more xl170 nodes."
         )
         exit(1)
-    controller_index = active_nodes[0]
+    controller_index = [active_nodes[0]]
     lbs_index = [active_nodes[i] for i in range(1, lb_num + 1)]
     backends_index = [active_nodes[i] for i in range(lb_num + 1, 2 * lb_num + 1)]
     clients_index = [active_nodes[i] for i in range(2 * lb_num + 1, len(active_nodes))]
