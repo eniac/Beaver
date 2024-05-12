@@ -67,6 +67,7 @@ These steps need to be followed for each new CloudLab reservation.
 ![cloudlab_reservation_topo.png](img/cloudlab_reservation_topo.png)
 
 4. Wait until the CloudLab experiment page shows status ready (it takes ~10 minutes for provisioning the `dell-s4048` before showing status ready). Then copy the XML contents under the `manifest` column (right next to the `List View` column) on the experiment profile page, and replace the contents in `cloudlab/manifest.xml` file.
+   * One may get `Experiment setup on the Cloudlab Utah cluster failed: SliverStart: Failed to set up experimental networks` error, especially when the number of xl170 nodes is higher. This is often an indication of the existence of a faulty link. However, one can still proceed with the experiment as long as the List View shows that every node is in status ready.
 
 5. Install dependencies on all machines in parallel by using `python3 beaver.py env` subcommand with the CloudLab user name (`--user_name`/`-u`) and the SSH private key file path (`--ssh_key` / `-k`).
    * Example command: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu env`.
