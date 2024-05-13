@@ -204,31 +204,45 @@ To obtain the results for larger `|G|`:
 
 ### Reproduce Figure 14
 
-*Detailed notes TBA.*
+The instructions below presume a configuration of `|G|=2`.
 
-**Reproduce Figure 14(a)**
+* Key observation: The performance values with Beaver should be similar than that without Beaver, and any discrepancy is a result of randomness in particular experiment runs (e.g., due to ECMP load imbalance). One could try running the experiment multiple times to sample more data points.
+* Increasing the scale argument should give the similar observation.
+
+**Figure 14(a)**
 
 * Run config phase AND copy the switch command to CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-20 -o config`
 * Run experiment for iperf with load 20%:
   * Without Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-20 -o run`
   * With Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-20 -ss -o run`
-  * Results will be saved under `results/load_2_2_<timestamp>_<client_node_id>.txt`
+  * Results will be saved as `results/load/iperf_2_2_<timestamp>_<node_id>.txt` or `results/load/iperf_ss_2_2_<timestamp>_<node_id>.txt` correspondingly.
+  * One may run each experiment multiple times to sample more measurements.
+* Similarly, for load 40%, 60%, and 80%:
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-40 -o run`
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-40 -ss -o run`
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-60 -o run`
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-60 -ss -o run`
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-80 -o run`
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-80 -ss -o run`
 * Run clear phase AND copy the switch command to the CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-10 -o clear`
 
-Observation: Concrete numbers may vary, but the key is that the number with Beaver should not be significantly smaller than that without Beaver, and any discrepancy is a result of randomness in particular experiment runs.
+**Figure 14(b)**
 
-**Reproduce Figure 14(b)**
-
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o config`
-
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -o run` (~5min)
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-r -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-r -ss -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-s -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-s -ss -o run`
-
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o clear`
+1. Run config phase AND copy the switch command to CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o config`
+2. Run experiment for Mixed-RW (each takes around 5 minutes):
+  * Without Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -o run` (~5min)
+  * With Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o run`
+  * The results will be saved as `results/load/ycsb_2_rw_<timestamp>.txt` and `results/load/ycsb_ss_2_rw_<timestamp>.txt` correspondingly.
+  * The throughput value is shown in the line starting with `[OVERALL], Throughput(ops/sec)`, and the p99 latency is the average of `[READ], 99thPercentileLatency(us)` and `[UPDATE], 99thPercentileLatency(us)`
+3. Run experiment for R-intensive:
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-r -o run`
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-r -ss -o run`
+  * The throughput value is shown in the line starting with `[OVERALL], Throughput(ops/sec)`, and the p99 latency is indicated by the line `[READ], 99thPercentileLatency(us)`
+4. Run experiment for S-intensive:
+  * `python3 beavera.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-s -o run`
+  * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-s -ss -o run`
+  * The throughput value is shown in the line starting with `[OVERALL], Throughput(ops/sec)`, and the p99 latency is indicated by the line `[SCAN], 99thPercentileLatency(us)`
+5. Run clear phase AND copy the switch commands to the CloudLab portal: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o clear`
 
 ### Reproduce Table 3
 
