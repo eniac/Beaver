@@ -261,8 +261,7 @@ f_ss_pkts_recv(__attribute__((unused)) void* arg)
                 recv_time_ptr = (uint64_t*)(ssid_ptr + 1);
                 recv_time = be64toh(*recv_time_ptr);
                 if (ssid % 1000 == 0) {
-                    recv_time_offsets[src_ip_index] =
-                        (2 * recv_time - first_sent_time[ssid]- f_clock_time_get()) / 2; 
+                    recv_time_offsets[src_ip_index] = (2 * recv_time - first_sent_time[ssid] - f_clock_time_get()) / 2;
                     // recv_time_offsets[src_ip_index] = recv_time - first_sent_time[ssid] - 1200;
                 }
                 uint32_t rand_time = rand() % 100;
@@ -283,8 +282,8 @@ f_ss_pkts_recv(__attribute__((unused)) void* arg)
     // std::string file_name = "raw_data.txt";
     // std::ofstream output_file(file_name);
     output_file << "ss_label "
-                << "t1\'-t0\' "
-                << "t1-t0\n";
+                << "t1-t0 "
+                << "e^{ss}_{gmax}.t-e^{ss}_{gmin}\n";
     for (uint32_t i = 0; i < g_max_ss_id; i++) {
         auto min_max_time = std::minmax_element(recv_reply_time[i].begin(), recv_reply_time[i].end());
         if (recv_all_reply_time[i] != 0) {
