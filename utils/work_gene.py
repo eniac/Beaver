@@ -73,7 +73,7 @@ def f_rate_config(xml_file_path, user_name, key_path, lb_num, base_path):
     f_compile(xml_file_path, user_name, key_path, nodes_config)
     f_sw_config_gene(xml_file_path, nodes_config["load_balancer"])
     print(
-        "Finsihed all the configurations.\n"
+        "Finished all the configurations.\n"
         "Please copy the commands above to the CloudLab switch console."
     )
 
@@ -236,11 +236,16 @@ def f_bound_run(xml_file_path, user_name, key_path, config_file_path):
     real_scale = scale
     file_name = f"bound_{real_scale}_{timestamp}.txt"
     local_file_path = os.path.join("results/bound/", file_name)
-    f_bound_ss_result_pull(
-        xml_file_path, user_name, key_path, nodes_config, local_file_path
-    )
-    f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
-    f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
+    try:
+        f_bound_ss_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        print("Kill processes...")
+        f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
+        f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
     print(
         f"Have finished the experiment.\n"
         f"Due the large number of results, the results are not printed.\n"
