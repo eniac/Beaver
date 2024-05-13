@@ -67,8 +67,7 @@ These steps need to be followed for each new CloudLab reservation.
 ![cloudlab_reservation_topo.png](img/cloudlab_reservation_topo.png)
 
 4. Wait until the CloudLab experiment page shows status ready (it takes ~10 minutes for provisioning the `dell-s4048` before showing status ready). Then copy the XML contents under the `manifest` column (right next to the `List View` column) on the experiment profile page, and replace the contents in `cloudlab/manifest.xml` file.
-   * One may get `Experiment setup on the Cloudlab Utah cluster failed: SliverStart: Failed to set up experimental networks` error, especially when the number of xl170 nodes is higher. This is often an indication of the existence of a faulty link. However, one can still proceed with the experiment as long as the List View shows that every node is in status ready.
-
+   * One may get `Experiment setup on the Cloudlab Utah cluster failed: SliverStart: Failed to set up experimental networks` error often, especially when the number of xl170 nodes is higher. This is often an indication of the existence of a faulty link between s4048 switch and xl170 nodes during CloudLab setup. Empirically, one can still proceed with the experiment if the List View shows that every node is in status ready. Note that CloudLab may kill/recycle the experiment, but the time window is typically >1h, sufficient for reproducing most experiments.
 5. Install dependencies on all machines in parallel by using `python3 beaver.py env` subcommand with the CloudLab user name (`--user_name`/`-u`) and the SSH private key file path (`--ssh_key` / `-k`).
    * Example command: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu env`.
    * By default, it will reads the manifest file of path `cloudlab/manifest.xml` to extract the information for the CloudLab machines. Otherwise, specify the path to the manifest file using the `--manifest` / `-m` option.
@@ -99,7 +98,7 @@ These steps need to be followed for each new CloudLab reservation.
 | 14      | 30                   |
 | 16      | 34                   |
 
-* Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` to set up environment for each new CloudLab experiment reservation.
+* Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` to set up environment for **each new CloudLab experiment reservation**.
 * In principle, **each experiment run** requires a mandatory config phase (before run) and a mandatory clear phase (after run), unless it shares the same switch configuration with another experiment:
   * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console. It will also complain `The number of booked nodes is not enough,please reduce the scale.` if the effective number of xl170 nodes (due to faulty links) is less than required for the experiment.
   * Run phase: `beaver.py` will run the experiment automatically and collect the results.
@@ -111,7 +110,7 @@ These steps need to be followed for each new CloudLab reservation.
 
 ![cloudlab_switch_console_before_copy.png](img/cloudlab_switch_console_before_copy.png)
 
-* After copying the commands and waiting for its execution (typically takes around 10 seconds), hit `ENTER` again to make sure the last command line is executed as well. `DellEMC>` (rather than, e.g., `DellEMC(conf)>`) will appear right after.
+* After copying the commands and waiting for its execution (typically takes around 10 seconds), hit `ENTER` again (OK to hit multiple times) to make sure the last command line is executed as well and that `DellEMC>` (rather than, e.g., `DellEMC(conf)>`) appears at the bottom of the console.
 
 ![cloudlab_switch_console_after_copy.png](img/cloudlab_switch_console_after_copy.png)
 
@@ -192,11 +191,16 @@ To obtain the effective snapshot rate for larger `|G|`:
 
 ### Reproduce Figure 13
 
-*Detailed notes TBA.*
+1. Run config phase AND copy the switch commands to CloudLab portal: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o config`
+2. Execute experiment to sample raw measurements for `t1-t0`, `e^{ss}_{gmax}.t - e^{ss}_{gmin}.t`: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o run`, which will take around 5 minutes.
+  * Results will be saved under `results/bound/bound_2_<timestamp>.txt`.
+  * By default, it collects 50K snapshots as larger snapshots take a longer time and higher network bandwidth to download the raw output data.
+  * One may run the experiment multiple times to sample more measurements.
+3. Run clear phase AND copy the switch commands to CloudLab portal: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o clear`
 
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o config`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o run`
-* `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o clear`
+To obtain the results for larger `|G|`:
+* Repeat the steps above in groups and change the scale argument `-s 2` to the target, e.g., `-s 4`.
+* The precise numbers may vary across runs, but the key observation is that `e^{ss}_{gmax}.t - e^{ss}_{gmin}.t` column is greater than `t1-t0`.
 
 ### Reproduce Figure 14
 
@@ -204,7 +208,7 @@ To obtain the effective snapshot rate for larger `|G|`:
 
 **Reproduce Figure 14(a)**
 
-* Run config phase AND copy the switch command to CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-10 -o config`
+* Run config phase AND copy the switch command to CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-20 -o config`
 * Run experiment for iperf with load 20%:
   * Without Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-20 -o run`
   * With Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt iperf-20 -ss -o run`
@@ -226,11 +230,9 @@ Observation: Concrete numbers may vary, but the key is that the number with Beav
 
 * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o clear`
 
-Recommended (? actually larger scale may give more stable results) to use a scale of 2 (-s 2), but increasing the scale should give similar observations, that is close to 1.
-
 ### Reproduce Table 3
 
-The experiments below only requires 6 valid xl170 nodes.
+6 valid xl170 nodes are sufficient for the group of experiments.
 
 1. Run config phase for the experiment: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st poll -o config`
 
