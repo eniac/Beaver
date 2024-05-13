@@ -642,7 +642,6 @@ def f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config):
         thread.start()
     for thread in threads:
         thread.join()
-    # print("Have removed requests and services.")
 
 
 def f_load_cassandra_env_config(xml_file_path, user_name, key_path, nodes_config):

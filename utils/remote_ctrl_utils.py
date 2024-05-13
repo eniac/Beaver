@@ -92,14 +92,12 @@ def f_file_checker(ssh_connection, remote_file_path):
     while True:
         try:
             sftp.stat(remote_file_path)
-            break
+            return True
         except IOError:
             elapsed_time = time.time() - start_time
             if elapsed_time > 60:
-                raise Exception(
-                    "Some programs may crash due to pressure test or the frequency "
-                    "is too low, please rerun the test."
-                )
+                print("File {} not found.".format(remote_file_path))
+                return False
             time.sleep(1)
 
 

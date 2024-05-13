@@ -304,7 +304,7 @@ def f_bound_ss_deploy(xml_file_path, user_name, key_path, nodes_config):
     controller_name = "node" + str(controller_index)
     ssh_ip = ssh_ips[controller_name]
     cmds = []
-    snapshot_num = 50000
+    snapshot_num = 50000  # TODO(lc): Make the number of snapshots configurable.
     cmds.append(
         f"cd controller && nohup sudo stdbuf -o0 "
         f"./launch_ss -c {snapshot_num} -f 65000 -b 0 2>&1 > /dev/null &"
@@ -375,10 +375,13 @@ def f_rate_ss_result_pull(
     remote_path = os.path.join("/users/", user_name)
     remote_path = os.path.join(remote_path, "controller")
     remote_file_path = os.path.join(remote_path, "freq_result.txt")
-    f_file_checker(ssh_connection, remote_file_path)
-    f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
-    f_file_remote_delete(ssh_connection, remote_file_path)
-    ssh_connection.close()
+    if f_file_checker(ssh_connection, remote_file_path):
+        f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
+        f_file_remote_delete(ssh_connection, remote_file_path)
+        ssh_connection.close()
+    else:
+        ssh_connection.close()
+        raise Exception("Fail to pull the result digest.")
 
 
 def f_bound_ss_result_pull(

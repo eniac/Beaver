@@ -198,18 +198,22 @@ def f_rate_run(
     if if_parallel:
         file_name = f"freq_para_{real_scale}_{timestamp}.txt"
     local_file_path = os.path.join("results/freq/", file_name)
-    f_rate_ss_result_pull(
-        xml_file_path, user_name, key_path, nodes_config, local_file_path
-    )
-    f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
-    f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
-    print("")
-    f_print_file_contents(local_file_path)
-    print("")
-    print(
-        f"Have finished the experiment, the results for Fig.10 have been outputed \n"
-        f"the results for Fig.10 are also in file results/freq/{file_name}."
-    )
+    try:
+        f_rate_ss_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+        print("")
+        f_print_file_contents(local_file_path)
+        print("")
+        print(
+            f"Have finished the experiment, the results for Fig.10 have been outputed \n"
+            f"the results for Fig.10 are also in file results/freq/{file_name}."
+        )        
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
+        f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
 
 
 def f_bound_run(xml_file_path, user_name, key_path, config_file_path):
