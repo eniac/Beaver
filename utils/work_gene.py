@@ -208,7 +208,7 @@ def f_rate_run(
         print(
             f"Have finished the experiment, the results for Fig.10 have been outputed \n"
             f"the results for Fig.10 are also in file results/freq/{file_name}."
-        )        
+        )
     except Exception as e:
         print("Catched an exception when pulling the results: {}".format(e))
     finally:
@@ -244,17 +244,16 @@ def f_bound_run(xml_file_path, user_name, key_path, config_file_path):
         f_bound_ss_result_pull(
             xml_file_path, user_name, key_path, nodes_config, local_file_path
         )
+        print(
+            f"Have finished the experiment.\n"
+            f"Due the large number of results, the results are not printed.\n"
+            f"the results for Fig.13 are in file results/bound/{file_name}."
+        )
     except Exception as e:
         print("Catched an exception when pulling the results: {}".format(e))
     finally:
-        print("Kill processes...")
         f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
         f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
-    print(
-        f"Have finished the experiment.\n"
-        f"Due the large number of results, the results are not printed.\n"
-        f"the results for Fig.13 are in file results/bound/{file_name}."
-    )
 
 
 def f_accuracy_run(xml_file_path, user_name, key_path, config_file_path, frequency):
@@ -281,18 +280,22 @@ def f_accuracy_run(xml_file_path, user_name, key_path, config_file_path, frequen
     real_scale = scale
     file_name = f"freq_{frequency}_{real_scale}_{timestamp}.txt"
     local_file_path = os.path.join("results/accuracy/", file_name)
-    f_accuracy_ss_result_pull(
-        xml_file_path, user_name, key_path, nodes_config, local_file_path
-    )
-    f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
-    f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
-    print("")
-    f_print_file_contents(local_file_path)
-    print("")
-    print(
-        f"Have finished the experiment, the results for Fig.11 have been outputed \n"
-        f"the results for Fig.11 are also in file results/accuracy/{file_name}."
-    )
+    try:
+        f_accuracy_ss_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+        print("")
+        f_print_file_contents(local_file_path)
+        print("")
+        print(
+            f"Have finished the experiment, the results for Fig.11 have been outputed \n"
+            f"the results for Fig.11 are also in file results/accuracy/{file_name}."
+        )
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
+        f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
 
 
 def f_load_run(
@@ -329,12 +332,16 @@ def f_load_run(
         if if_snapshot:
             file_name_prefix = f"iperf_ss_{real_scale}_{details}_{timestamp}"
         local_file_prefix = os.path.join("results/load/", file_name_prefix)
-        f_load_iperf_result_pull(
-            xml_file_path, user_name, key_path, nodes_config, local_file_prefix
-        )
-        f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
-        f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
-        f_average_bandwidth("results/load/", timestamp, file_name_prefix)
+        try:
+            f_load_iperf_result_pull(
+                xml_file_path, user_name, key_path, nodes_config, local_file_prefix
+            )
+            f_average_bandwidth("results/load/", timestamp, file_name_prefix)
+        except Exception as e:
+            print("Catched an exception when pulling the results: {}".format(e))
+        finally:
+            f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
+            f_rate_services_remove(xml_file_path, user_name, key_path, nodes_config)
     elif real_type == "cassandra":
         f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
         f_load_cassandra_remove(xml_file_path, user_name, key_path, nodes_config)
@@ -354,11 +361,15 @@ def f_load_run(
         if if_snapshot:
             file_name = f"ycsb_ss_{real_scale}_{details}_{timestamp}.txt"
         local_file_path = os.path.join("results/load/", file_name)
-        f_load_cassandra_result_pull(
-            xml_file_path, user_name, key_path, nodes_config, local_file_path
-        )
-        f_load_cassandra_remove(xml_file_path, user_name, key_path, nodes_config)
-        f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
+        try:
+            f_load_cassandra_result_pull(
+                xml_file_path, user_name, key_path, nodes_config, local_file_path
+            )
+        except Exception as e:
+            print("Catched an exception when pulling the results: {}".format(e))
+        finally:
+            f_load_cassandra_remove(xml_file_path, user_name, key_path, nodes_config)
+            f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
     print("Have finished the experiment, check folder " "results/load/ for results!")
 
 
@@ -377,14 +388,18 @@ def f_latency_intra_run(xml_file_path, user_name, key_path, config_file_path):
     timestamp = time.strftime("%Y%m%d%H%M%S")
     file_name = f"latency_intra_{timestamp}.txt"
     local_file_path = os.path.join("results/latency/", file_name)
-    f_latency_intra_result_pull(
-        xml_file_path, user_name, key_path, nodes_config, local_file_path
-    )
-    f_latency_intra_progs_remove(xml_file_path, user_name, key_path, nodes_config)
-    print(
-        f"Have finished the experiment.\n"
-        f"Due to large number, the results are in file results/latency/{file_name}."
-    )
+    try:
+        f_latency_intra_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+        print(
+            f"Have finished the experiment.\n"
+            f"Due to large number, the results are in file results/latency/{file_name}."
+        )
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        f_latency_intra_progs_remove(xml_file_path, user_name, key_path, nodes_config)
 
 
 def f_latency_internet_run(xml_file_path, user_name, key_path, config_file_path):
@@ -406,10 +421,14 @@ def f_latency_internet_run(xml_file_path, user_name, key_path, config_file_path)
     timestamp = time.strftime("%Y%m%d%H%M%S")
     file_name = f"latency_internet_{timestamp}.txt"
     local_file_path = os.path.join("results/latency/", file_name)
-    f_latency_intra_result_pull(
-        xml_file_path, user_name, key_path, nodes_config, local_file_path
-    )
-    f_latency_intra_progs_remove(xml_file_path, user_name, key_path, nodes_config)
+    try:
+        f_latency_intra_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        f_latency_intra_progs_remove(xml_file_path, user_name, key_path, nodes_config)
 
 
 def f_latency_inter_run(xml_file_path, user_name, key_path, config_file_path):
@@ -434,10 +453,14 @@ def f_latency_inter_run(xml_file_path, user_name, key_path, config_file_path):
     timestamp = time.strftime("%Y%m%d%H%M%S")
     file_name = f"latency_inter_{timestamp}.txt"
     local_file_path = os.path.join("results/latency/", file_name)
-    f_latency_intra_result_pull(
-        xml_file_path, user_name, key_path, nodes_config, local_file_path
-    )
-    f_latency_intra_progs_remove(xml_file_path, user_name, key_path, nodes_config)
+    try:
+        f_latency_intra_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        f_latency_intra_progs_remove(xml_file_path, user_name, key_path, nodes_config)
 
 
 def f_bot_beaver_run(xml_file_path, user_name, key_path, config_file_path, ratio):
@@ -465,8 +488,14 @@ def f_bot_beaver_run(xml_file_path, user_name, key_path, config_file_path, ratio
     timestamp = time_name.strftime("%Y%m%d%H%M%S")
     file_name = f"bot_beaver_{ratio}_{timestamp}.txt"
     local_file_path = os.path.join("results/bot/", file_name)
-    f_bot_result_pull(xml_file_path, user_name, key_path, nodes_config, local_file_path)
-    f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
+    try:
+        f_bot_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
 
 
 def f_bot_poll_run(xml_file_path, user_name, key_path, config_file_path, ratio):
@@ -490,8 +519,14 @@ def f_bot_poll_run(xml_file_path, user_name, key_path, config_file_path, ratio):
     timestamp = time_name.strftime("%Y%m%d%H%M%S")
     file_name = f"bot_poll_{ratio}_{timestamp}.txt"
     local_file_path = os.path.join("results/bot/", file_name)
-    f_bot_result_pull(xml_file_path, user_name, key_path, nodes_config, local_file_path)
-    f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
+    try:
+        f_bot_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
 
 
 def f_bot_laiyang_run(xml_file_path, user_name, key_path, config_file_path, ratio):
@@ -515,5 +550,11 @@ def f_bot_laiyang_run(xml_file_path, user_name, key_path, config_file_path, rati
     timestamp = time_name.strftime("%Y%m%d%H%M%S")
     file_name = f"bot_laiyang_{ratio}_{timestamp}.txt"
     local_file_path = os.path.join("results/bot/", file_name)
-    f_bot_result_pull(xml_file_path, user_name, key_path, nodes_config, local_file_path)
-    f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)
+    try:
+        f_bot_result_pull(
+            xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+    except Exception as e:
+        print("Catched an exception when pulling the results: {}".format(e))
+    finally:
+        f_rate_progs_remove(xml_file_path, user_name, key_path, nodes_config)

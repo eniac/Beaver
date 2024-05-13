@@ -395,11 +395,14 @@ def f_bound_ss_result_pull(
     remote_path = os.path.join("/users/", user_name)
     remote_path = os.path.join(remote_path, "controller")
     remote_file_path = os.path.join(remote_path, "raw_data.txt")
-    f_file_checker(ssh_connection, remote_file_path)
-    time.sleep(2)
-    f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
-    f_file_remote_delete(ssh_connection, remote_file_path)
-    ssh_connection.close()
+    if f_file_checker(ssh_connection, remote_file_path):
+        time.sleep(2)
+        f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
+        f_file_remote_delete(ssh_connection, remote_file_path)
+        ssh_connection.close()
+    else:
+        ssh_connection.close()
+        raise Exception("Fail to pull the result digest.")
 
 
 def f_accuracy_ss_result_pull(
@@ -413,10 +416,13 @@ def f_accuracy_ss_result_pull(
     remote_path = os.path.join("/users/", user_name)
     remote_path = os.path.join(remote_path, "controller")
     remote_file_path = os.path.join(remote_path, "freq_result.txt")
-    f_file_checker(ssh_connection, remote_file_path)
-    f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
-    f_file_remote_delete(ssh_connection, remote_file_path)
-    ssh_connection.close()
+    if f_file_checker(ssh_connection, remote_file_path):
+        f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
+        f_file_remote_delete(ssh_connection, remote_file_path)
+        ssh_connection.close()
+    else:
+        ssh_connection.close()
+        raise Exception("Fail to pull the result digest.")
 
 
 def f_latency_intra_result_pull(
@@ -430,11 +436,14 @@ def f_latency_intra_result_pull(
     remote_path = os.path.join("/users/", user_name)
     remote_path = os.path.join(remote_path, "load_balancer")
     remote_file_path = os.path.join(remote_path, "latency.txt")
-    f_file_checker(ssh_connection, remote_file_path)
-    time.sleep(1)
-    f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
-    f_file_remote_delete(ssh_connection, remote_file_path)
-    ssh_connection.close()
+    if f_file_checker(ssh_connection, remote_file_path):
+        time.sleep(1)
+        f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
+        f_file_remote_delete(ssh_connection, remote_file_path)
+        ssh_connection.close()
+    else:
+        ssh_connection.close()
+        raise Exception("Fail to pull the result digest.")
 
 
 def f_bot_result_pull(
@@ -448,11 +457,14 @@ def f_bot_result_pull(
     remote_path = os.path.join("/users/", user_name)
     remote_path = os.path.join(remote_path, "client")
     remote_file_path = os.path.join(remote_path, "bot.txt")
-    f_file_checker(ssh_connection, remote_file_path)
-    time.sleep(1)
-    f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
-    f_file_remote_delete(ssh_connection, remote_file_path)
-    ssh_connection.close()
+    if f_file_checker(ssh_connection, remote_file_path):
+        time.sleep(1)
+        f_file_remote_fetch(ssh_connection, remote_file_path, local_file_path)
+        f_file_remote_delete(ssh_connection, remote_file_path)
+        ssh_connection.close()
+    else:
+        ssh_connection.close()
+        raise Exception("Fail to pull the result digest.")
 
 
 def f_load_cassandra_result_pull(

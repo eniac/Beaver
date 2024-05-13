@@ -81,7 +81,7 @@ f_load_balance_pkt(struct rte_mbuf* recv_pkt, struct rte_mbuf* mbuf_send, uint16
             output_file.close();
         }
     }
-    // The locotions of port in udp and tcp are same,
+    // The locations of port in udp and tcp are same,
     // so only using udp header is enough.
     struct rte_udp_hdr* udp_hdr;
     hdr_offset += sizeof(struct rte_ipv4_hdr);
