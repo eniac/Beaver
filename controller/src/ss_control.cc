@@ -221,7 +221,8 @@ f_ss_pkts_recv(__attribute__((unused)) void* arg)
     uint64_t recv_time;
     struct rte_ipv4_hdr* ip_hdr;
     struct rte_ether_hdr* eth_hdr;
-
+    std::string file_name = "raw_data.txt";
+    std::ofstream output_file(file_name);
     while (true) {
         pkt_recv_num = rte_eth_rx_burst(g_nic_info_ctrl_plane.id, queue_config->queue_id, mbufs_recv, kRecvBurstSize);
         for (uint32_t i = 0; i < pkt_recv_num; i++) {
@@ -259,10 +260,10 @@ f_ss_pkts_recv(__attribute__((unused)) void* arg)
                 ssid = ntohl(*ssid_ptr);
                 recv_time_ptr = (uint64_t*)(ssid_ptr + 1);
                 recv_time = be64toh(*recv_time_ptr);
-                if (ssid == 0) {
-                    // recv_time_offsets[src_ip_index] =
-                    //     (2 * recv_time - first_sent_time[ssid]- f_clock_time_get()) / 2;
-                    recv_time_offsets[src_ip_index] = recv_time - first_sent_time[ssid] - 1200;
+                if (ssid % 1000 == 0) {
+                    recv_time_offsets[src_ip_index] =
+                        (2 * recv_time - first_sent_time[ssid]- f_clock_time_get()) / 2; 
+                    // recv_time_offsets[src_ip_index] = recv_time - first_sent_time[ssid] - 1200;
                 }
                 uint32_t rand_time = rand() % 100;
                 recv_reply_time[ssid][src_ip_index] = recv_time - recv_time_offsets[src_ip_index] + rand_time;
@@ -279,8 +280,8 @@ f_ss_pkts_recv(__attribute__((unused)) void* arg)
     }
     uint32_t qualified_ss_num = 0;
     ss_end_time = f_clock_time_get();
-    std::string file_name = "raw_data.txt";
-    std::ofstream output_file(file_name);
+    // std::string file_name = "raw_data.txt";
+    // std::ofstream output_file(file_name);
     output_file << "ss_label "
                 << "t1\'-t0\' "
                 << "t1-t0\n";
@@ -295,6 +296,7 @@ f_ss_pkts_recv(__attribute__((unused)) void* arg)
             sender_time_diff = recv_all_reply_time[i] - first_sent_time[i];
             // Real Time used to finish the snapshot notification.
             real_time_diff = *min_max_time.second - *min_max_time.first;
+            // if (sender_time_diff < real_time_diff)
             output_file << i << " " << sender_time_diff << " " << real_time_diff << "\n";
         }
     }
