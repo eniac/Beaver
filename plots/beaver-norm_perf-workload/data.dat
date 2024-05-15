@@ -1,0 +1,4 @@
+# WordloadType throughput_wo(ops/s) throughput_w latency_wo(us) latency_w
+Mixed-RW 1133.25 1125.07 1168 1166
+R-intensive 1051.11 1064.76 1198 1190
+S-intensive 440.86 439.03 3703 3741
