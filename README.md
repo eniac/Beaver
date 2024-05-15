@@ -139,6 +139,11 @@ To obtain the snapshot frequency for larger `|G|`:
 * Repeat step 1 to 7 one-by-one except replacing the scale argument `-s 2`. E.g., for `|G|=4`, use `-s 4`.
 * The precise numbers may vary across runs, but the trends should be consistent: (1) The snapshot frequency with parallelism is significantly higher than that without parallelism, and (2) the snapshot frequency decreases as the scale increases on average.
 
+To reproduce the Figure 10(a) and 10(b) plot based on averaged results:
+* `cd plots/beaver-max_ss_freq-g`
+* `gnuplot plot.gp`
+* Open the 2 generated .eps plot files in the same directory.
+
 ### Reproduce Figure 11
 
 Follow the command below **in order** to obtain the effective snapshot rate for different snapshot frequencies, given `|G|=2`:
@@ -166,6 +171,11 @@ To obtain the effective snapshot rate for larger `|G|`:
 * Repeat step 1 to 5 one-by-one except replacing the scale argument `-s 2`. E.g., for `|G|=4`, use `-s 4`. Note that 131072 is not achievable for `|G|=16`.
 * The precise numbers may vary across runs, but one should expect the effective snapshot rate to be close to 1 (that is, 100%).
 
+To reproduce the Figure 11 plot based on averaged results:
+* `cd plots/beaver-effective_ss_rate-ss_freq`
+* `gnuplot plot.gp`
+* Open the generated .eps plot file in the same directory.
+
 ### Reproduce Figure 12
 
 1. Sample measurements for the time to form the external causal chain for intra-DC setting:
@@ -189,6 +199,11 @@ To obtain the effective snapshot rate for larger `|G|`:
    * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt internet -o clear`
    * Expected observation: The concrete numbers may vary because it depends on the physical location of your local desktop. Typical values should be 10s of ms. Again, what matters is that measurements are greater than the minimum 33us which should hold trivially.
 
+To reproduce the Figure 12 plot:
+* `cd plots/beaver-cdf-tau`
+* `gnuplot plot.gp`
+* Open the generated .eps plot in the same directory.
+
 ### Reproduce Figure 13
 
 1. Run config phase AND copy the switch commands to CloudLab portal: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bound -s 2 -o config`
@@ -201,6 +216,16 @@ To obtain the effective snapshot rate for larger `|G|`:
 To obtain the results for larger `|G|`:
 * Repeat the steps above in groups and change the scale argument `-s 2` to the target, e.g., `-s 4`.
 * The precise numbers may vary across runs, but the key observation is that `e^{ss}_{gmax}.t - e^{ss}_{gmin}.t` column is greater than `t1-t0`.
+
+To reproduce the Figure 13 plots:
+* For the cdf subplots:
+  * `cd plots/beaver-cdf-time_diff`
+  * `gnuplot plot.gp`
+  * Open the 4 generated .eps plot files in the same directory.
+* For the time series visualization:
+  * `cd plots/beaver-time_diff-ss_id`
+  * `gnuplot plot.gp`
+  * Open the 4 generated .eps plot files in the same directory.
 
 ### Reproduce Figure 14
 
@@ -243,6 +268,16 @@ The instructions below presume a configuration of `|G|=2`.
   * `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-s -ss -o run`
   * The throughput value is shown in the line starting with `[OVERALL], Throughput(ops/sec)`, and the p99 latency is indicated by the line `[SCAN], 99thPercentileLatency(us)`
 5. Run clear phase AND copy the switch commands to the CloudLab portal: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu load -s 2 -lt cassandra-rw -ss -o clear`
+
+To reproduce the Figure 14 plots:
+* For Fig. 14(a):
+  * `cd plots/beaver-norm_tpt-iperfload`
+  * `gnuplot plot.gp`
+  * Open the generated .eps plot in the same directory.
+* For Fig. 14(b):
+  * `cd plots/beaver-norm_perf-workload`
+  * `gnuplot plot.gp`
+  * Open the generated .eps plot in the same directory.
 
 ### Reproduce Table 3
 
