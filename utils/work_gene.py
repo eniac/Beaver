@@ -9,6 +9,8 @@ from utils.config_gene import (
     f_load_config_gene,
     f_rate_config_gene,
 )
+
+# TODO(lc): Refactor current work/task/job modules and rename functions to indicate hierarchy.
 from utils.config_task_gene import (
     f_sw_clear_gene,
     f_sw_config_gene,
@@ -425,6 +427,10 @@ def f_latency_internet_run(xml_file_path, user_name, key_path, config_file_path)
         f_latency_intra_result_pull(
             xml_file_path, user_name, key_path, nodes_config, local_file_path
         )
+        print(
+            f"Have finished the experiment.\n"
+            f"Due to large number, the results are in file results/latency/{file_name}."
+        )
     except Exception as e:
         print("Catched an exception when pulling the results: {}".format(e))
     finally:
@@ -456,6 +462,10 @@ def f_latency_inter_run(xml_file_path, user_name, key_path, config_file_path):
     try:
         f_latency_intra_result_pull(
             xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+        print(
+            f"Have finished the experiment.\n"
+            f"Due to large number, the results are in file results/latency/{file_name}."
         )
     except Exception as e:
         print("Catched an exception when pulling the results: {}".format(e))

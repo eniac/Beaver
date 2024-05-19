@@ -182,7 +182,7 @@ To reproduce the Figure 11 plot based on averaged results:
    * Run config phase AND copy the switch command to the CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o config`
    * Run measurement with `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o run`
      * The results (in nanoseconds) will be saved to `results/latency/latency_intra_<timestamp>.txt`.
-     * For faster experiment runs, each run samples 1000 measurements by default. One can run this step multiple times to sample more measurements.
+     * For faster experiment runs, each run samples 100 measurements by default. One can run this step multiple times to sample more measurements.
    * Run clear phase AND copy the switch command to the CloudLab console: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu latency -lt intra -o clear`
    * Expected observation: Typical numbers should be around 10s of us to 100s of us. For Beaver, what matters is the minimum, and the sampled measurements should be greater than 33us.
 

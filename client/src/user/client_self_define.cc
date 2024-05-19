@@ -33,7 +33,7 @@ f_latency_test_client(const std::string& service_ip, int service_port)
     std::mt19937 gen(rd());
     std::poisson_distribution<> d(3);
     int request_counter = 0;
-    while (request_counter < 1000) { // TODO(lc): Make the number of requests configurable.
+    while (request_counter < 100) { // TODO(lc): Make the number of requests configurable.
         for (int i = 0; i < 2; i++) {
             sendto(
                 sock_fd,
