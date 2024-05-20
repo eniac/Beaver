@@ -36,10 +36,10 @@ def f_nodes_config_gene(lb_num, active_nodes):
 
 
 def f_bot_nodes_config_gene(active_nodes):
-    controller_index = [1]
-    lbs_index = [active_nodes[0]]
-    backends_index = [active_nodes[1], active_nodes[2]]
-    clients_index = [active_nodes[3]]
+    controller_index = [active_nodes[0]]
+    lbs_index = [active_nodes[1]]
+    backends_index = [active_nodes[2], active_nodes[3]]
+    clients_index = [active_nodes[4]]
     nodes_config = {
         "controller": controller_index,
         "load_balancer": lbs_index,

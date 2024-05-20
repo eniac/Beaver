@@ -287,7 +287,7 @@ To reproduce the Figure 14 plots:
 
 2. Copy the printed switch commands to the CloudLab portal. No need to run the clear phase as all experiments for Table 3 share the same switch configuration.
 
-3. Run the following commands to obtain TP, FP, TN, FN results for bot ratio = 0% for different approaches. After each run, the results will be printed and saved to `results/bot/bot_<snapshot_type>_<bot_ratio>_<timestamp>.txt`.
+3. Run the following commands to obtain TP, FP, TN, FN results for bot ratio = 0% for different approaches. After each run (should take less than 1 minute), the results will be printed and saved to `results/bot/bot_<snapshot_type>_<bot_ratio>_<timestamp>.txt`. One can run each experiment multiple times to sample more measurements.
    * Polling: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st poll -o run`
    * Laiyang (L-Y): `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st laiyang -o run`
    * Beaver: `python3 beaver.py -u leoyu -k ~/.ssh/leoyu bot -r 0 -st beaver -o run`

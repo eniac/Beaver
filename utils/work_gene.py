@@ -502,6 +502,10 @@ def f_bot_beaver_run(xml_file_path, user_name, key_path, config_file_path, ratio
         f_bot_result_pull(
             xml_file_path, user_name, key_path, nodes_config, local_file_path
         )
+        f_print_file_contents(local_file_path)
+        print(
+            f"Have finished the experiment, results are also saved in file {local_file_path}."
+        )
     except Exception as e:
         print("Catched an exception when pulling the results: {}".format(e))
     finally:
@@ -533,6 +537,10 @@ def f_bot_poll_run(xml_file_path, user_name, key_path, config_file_path, ratio):
         f_bot_result_pull(
             xml_file_path, user_name, key_path, nodes_config, local_file_path
         )
+        f_print_file_contents(local_file_path)
+        print(
+            f"Have finished the experiment, results are saved in file {local_file_path}."
+        )
     except Exception as e:
         print("Catched an exception when pulling the results: {}".format(e))
     finally:
@@ -563,6 +571,10 @@ def f_bot_laiyang_run(xml_file_path, user_name, key_path, config_file_path, rati
     try:
         f_bot_result_pull(
             xml_file_path, user_name, key_path, nodes_config, local_file_path
+        )
+        f_print_file_contents(local_file_path)
+        print(
+            f"Have finished the experiment, results are saved in file {local_file_path}."
         )
     except Exception as e:
         print("Catched an exception when pulling the results: {}".format(e))
