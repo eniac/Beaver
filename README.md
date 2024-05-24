@@ -43,6 +43,10 @@ checksums, NAT caching in a shared eBPF map, and the de-encapsulation of incomin
   <img src="img/setup.png" />
 </p>
 
+> If one is interested in running the Beaver prototype in local data center clusters:
+> - The implementation of various Beaver modules (backend, client, controller, and SLB) are portal to general x64 servers. One can goto the corresponding directories and build with the provided Makefile.
+> - The detailed configuration of the L3 switch is fully dependent on the underlying switching hardware model owned by the user. A minimal configuration should ensure (1) ping-connectivity and correct forwarding behavior among all servers (SLBs, clients, backend servers, and controller) for the target topology, and (2) ECMP load balancing across L4 SLB servers for the same VIP.
+
 ## Resource Requirements
 
 Beaver has been tested extensively on CloudLab, and the artifact automates the process as much as possible for the ease of reproducing the experiments all on CloudLab.
