@@ -3,7 +3,14 @@
 Beaver is a practical partial snapshot protocol that guarantees causal consistency under external traffic interference.
 By exploiting the placement of software load balancers in data center networks and their associated communication pattern, Beaver not only requires minimal changes to today’s data center operations, but also eliminates any form of blocking to existing distributed communication and its related impact to user traffic.
 
+<p align="center">
+  <img src="img/beaver.png" />
+</p>
+
+## Table of Contents
+
 - [Beaver](#beaver)
+  - [Table of Contents](#table-of-contents)
   - [Repo Structure](#repo-structure)
   - [Resource Requirements](#resource-requirements)
   - [Experiment Setup with CloudLab / Kick-the-tires Instructions](#experiment-setup-with-cloudlab--kick-the-tires-instructions)
@@ -31,6 +38,10 @@ checksums, NAT caching in a shared eBPF map, and the de-encapsulation of incomin
 * `controller/`: Beaver's controller server that initiates, controls, collects the results of the snapshots. It also applies the detection algorithm for verifying the snapshots.
 * `load_balancer/`: The software load balancer implementation that emulates the typical behvaiors using DPDK, including consistent hashing, caching, SLB-forwarding based on Virtual IP (VIP), and encapsulation. It also includes the optimistic gateway marking logic for Beaver.
 * `uilts/`: The utility scripts for automating the experiments.
+
+<p align="center">
+  <img src="img/setup.png" />
+</p>
 
 ## Resource Requirements
 
