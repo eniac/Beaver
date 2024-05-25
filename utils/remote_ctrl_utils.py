@@ -4,12 +4,33 @@ import time
 import paramiko
 
 
+def load_private_key(key_path):
+    """Attempt to load a private key from a file."""
+    key_loaders = [
+        paramiko.RSAKey,
+        paramiko.DSSKey,
+        paramiko.ECDSAKey,
+        paramiko.Ed25519Key,
+    ]
+    for key_loader in key_loaders:
+        try:
+            return key_loader.from_private_key_file(key_path)
+        except paramiko.SSHException:
+            continue
+    print(
+        "Failed to load the private key, unsupported key type or incorrect key format."
+    )
+    return None
+
+
 def f_ssh_connection_create(ssh_ip, user_name, key_path):
     """Create a ssh connection to a specific node."""
     try:
         ssh_connection = paramiko.SSHClient()
         ssh_connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        private_key = paramiko.RSAKey.from_private_key_file(key_path)
+        private_key = load_private_key(key_path)
+        if not private_key:
+            return None
         ssh_connection.connect(ssh_ip, username=user_name, pkey=private_key)
         return ssh_connection
     except paramiko.AuthenticationException:
