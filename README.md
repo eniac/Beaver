@@ -115,7 +115,7 @@ These steps need to be followed for each new CloudLab reservation.
 
 * Complete the steps in the section `Experiment Setup with CloudLab / Kick-the-tires Instructions` to set up environment for **each new CloudLab experiment reservation**.
 * In principle, **each experiment run** requires a mandatory config phase (before run) and a mandatory clear phase (after run), unless it shares the same switch configuration with another experiment:
-  * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console. It will also complain `The number of booked nodes is not enough,please reduce the scale.` if the effective number of xl170 nodes (due to faulty links) is less than required for the experiment.
+  * Config phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console. It will also complain `Insufficient number of valid xl170 nodes, please reduce the scale or reserve more xl170 nodes.` if the effective number of xl170 nodes (due to faulty links) is less than required for the experiment.
   * Run phase: `beaver.py` will run the experiment automatically and collect the results.
   * Clear phase: `beaver.py` will also print the switch commands that must be manually copied to the CloudLab switch console to reset the switch state and clear up folders on the remote machines.
 
